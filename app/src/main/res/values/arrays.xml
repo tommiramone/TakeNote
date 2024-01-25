@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="array_notification_priorities">
+        <item>Prioridad 1</item>
+        <item>Prioridad 2</item>
+        <!-- Agrega otros elementos según sea necesario -->
+    </string-array>
+
+    <integer-array name="array_notification_priority_values">
+        <item>1</item>
+        <item>2</item>
+        <!-- Agrega otros valores según sea necesario -->
+    </integer-array>
+
+</resources>

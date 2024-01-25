@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+    <item name="android:imeOptions">flagNoExtractUi</item>
+    <item name="android:inputType">text</item>
+    <item name="android:queryBackground">@android:color/transparent</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:singleLine">true</item>
+</style>
+</resources>
