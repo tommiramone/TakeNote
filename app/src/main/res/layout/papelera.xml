@@ -50,7 +50,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- NestedScrollView que contiene el RecyclerView y otras vistas -->
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -60,7 +60,7 @@
 
         <!-- RecyclerView para mostrar las notas -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/recyclerViewPapelera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp" />

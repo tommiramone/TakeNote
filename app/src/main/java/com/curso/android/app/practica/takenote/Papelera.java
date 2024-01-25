@@ -1,6 +1,7 @@
 package com.curso.android.app.practica.takenote;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,10 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.curso.android.app.practica.takenote.adapters.NotaAdapter;
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
+
 import java.util.List;
 
+public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemClickListener {
 
-public class Papelera extends AppCompatActivity {
     private NotaAdapter mNotaAdapter;
     private DatabaseHelper dbHelper;
 
@@ -20,31 +22,46 @@ public class Papelera extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.papelera);
 
-        // Inicializa dbHelper antes de utilizarlo
         dbHelper = DatabaseHelper.getInstance(this);
 
-        // No es necesario borrar el contenido de la papelera aquí
-        // dbHelper.borrarContenidoBaseDatos("papelera");
+        List<DatabaseHelper.Nota> notasEnPapelera = obtenerNotasEnPapelera();
+        Log.d("PapeleraActivity", "Notas en Papelera: " + notasEnPapelera.size());
 
-        // Obtén las notas de la papelera después de inicializar dbHelper
-//        mNotaAdapter = new NotaAdapter(dbHelper.obtenerNotas("papelera"), "papelera", this);
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewPapelera);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        mNotaAdapter = new NotaAdapter(notasEnPapelera, this);
 
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // La referencia a obtenerNotas debería ir después de la inicialización de dbHelper
-        mNotaAdapter.setNotas(dbHelper.obtenerNotas("papelera"));
+        mNotaAdapter.setNotas(notasEnPapelera);
+        mNotaAdapter.setOnItemClickListener(this);
+    }
+
+    private List<DatabaseHelper.Nota> obtenerNotasEnPapelera() {
+        return dbHelper.obtenerNotas("papelera");
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onItemClick(int position) {
+        Log.d("PapeleraActivity", "onItemClick called for position: " + position);
+    }
 
-        // Actualiza la lista de notas de la papelera
-        List<DatabaseHelper.Nota> notasPapelera = dbHelper.obtenerNotas("papelera");
-        mNotaAdapter.setNotas(notasPapelera);
-        mNotaAdapter.notifyDataSetChanged();
+    @Override
+    public void onEditarClick(int position) {
+        // Implementa el comportamiento cuando se hace clic en editar en un elemento en la Papelera
+        // Por ejemplo, podrías abrir una vista de edición para el elemento seleccionado
+    }
+
+    @Override
+    public void onEliminarClick(int position) {
+        // Implementa el comportamiento cuando se hace clic en eliminar en un elemento en la Papelera
+        // Por ejemplo, podrías eliminar el elemento de la Papelera y actualizar la lista
+    }
+
+    @Override
+    public void onEnviarAPapeleraClick(int position) {
+        // Implementa el comportamiento cuando se hace clic en enviar a papelera en un elemento en la Papelera
+        // Por ejemplo, podrías mover el elemento de nuevo a la lista principal de notas
     }
 }

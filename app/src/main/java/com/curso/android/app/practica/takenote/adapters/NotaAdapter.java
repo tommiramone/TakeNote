@@ -1,6 +1,7 @@
 package com.curso.android.app.practica.takenote.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import com.curso.android.app.practica.takenote.database.DatabaseHelper;
 import java.util.List;
 
 public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder> {
-
+    private DatabaseHelper dbHelper;
     private List<DatabaseHelper.Nota> listaDeNotas;
     private Context context;
     private OnItemClickListener mListener;
@@ -24,12 +25,16 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     public NotaAdapter(List<DatabaseHelper.Nota> listaDeNotas, Context context) {
         this.listaDeNotas = listaDeNotas;
         this.context = context;
+        dbHelper = DatabaseHelper.getInstance(context);
     }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
-        void onEditarClick(int position); // Agregar método para editar
+        void onEditarClick(int position);
+        void onEliminarClick(int position);
+        void onEnviarAPapeleraClick(int position);
     }
+
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
@@ -38,12 +43,14 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     @NonNull
     @Override
     public NotaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("NotaAdapter", "onCreateViewHolder called");
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nota, parent, false);
         return new NotaViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NotaViewHolder holder, int position) {
+        Log.d("NotaAdapter", "onBindViewHolder called for position: " + position);
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
         holder.bind(nota);
     }
@@ -54,16 +61,20 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     }
 
     public class NotaViewHolder extends RecyclerView.ViewHolder {
-
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
         private TextView tituloTextView;
         private TextView cuerpoTextView;
         private ImageView editarImageView;
+        private ImageView eliminarImageView;
+
+
 
         public NotaViewHolder(@NonNull View itemView) {
             super(itemView);
             tituloTextView = itemView.findViewById(R.id.tituloNota);
             cuerpoTextView = itemView.findViewById(R.id.cuerpoNota);
             editarImageView = itemView.findViewById(R.id.iconoEditar);
+            eliminarImageView = itemView.findViewById(R.id.iconoEliminar);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,6 +100,29 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                     }
                 }
             });
+            editarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onEditarClick(position);
+                        }
+                    }
+                }
+            });
+
+            eliminarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onEliminarClick(position);
+                        }
+                    }
+                }
+            });
         }
 
         public void bind(DatabaseHelper.Nota nota) {
@@ -108,5 +142,23 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         }
         return listaDeNotas.get(position);
     }
+
+    public void eliminarNota(int position) {
+        DatabaseHelper.Nota nota = listaDeNotas.get(position);
+        int notaId = nota.getId();
+        dbHelper.eliminarNota(notaId);
+        listaDeNotas.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void enviarNotaAPapelera(int position) {
+        DatabaseHelper.Nota nota = listaDeNotas.get(position);
+        int notaId = nota.getId();
+        dbHelper.enviarNotaAPapelera(notaId);
+        listaDeNotas.remove(position);
+        notifyItemRemoved(position);
+    }
+
+
 }
 
