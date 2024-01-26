@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
 
+import java.security.SecureRandom;
+import java.math.BigInteger;
+
 public class Login extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     @Override
@@ -32,7 +35,10 @@ public class Login extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
 
                 if (validarCredenciales(email, contrasenia)) {
-                    // Credenciales válidas, permitir acceso
+                    // Credenciales válidas, permitir acceso y generar token
+                    String token = generarToken();
+                    guardarTokenEnBaseDeDatos(email, token);
+
                     // Por ejemplo, iniciar una nueva actividad
                     Intent intent = new Intent(Login.this, Home.class);
                     startActivity(intent);
@@ -58,7 +64,16 @@ public class Login extends AppCompatActivity {
         return credencialesValidas;
     }
 
+    // Método para generar un token aleatorio y seguro
+    private String generarToken() {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] tokenBytes = new byte[64];
+        secureRandom.nextBytes(tokenBytes);
+        return new BigInteger(1, tokenBytes).toString(16); // Representación hexadecimal
+    }
 
+    // Método para guardar el token en la base de datos
+    private void guardarTokenEnBaseDeDatos(String email, String token) {
+       databaseHelper.guardarTokenUsuario(email, token);
+    }
 }
-
-

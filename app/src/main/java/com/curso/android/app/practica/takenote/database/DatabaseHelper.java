@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createTableQuery = "CREATE TABLE notas (_id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT, cuerpo TEXT)";
         db.execSQL(createTableQuery);
 
-        String createUsuariosTableQuery = "CREATE TABLE usuarios (_id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, email TEXT, contraseña TEXT)";
+        String createUsuariosTableQuery = "CREATE TABLE usuarios (_id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, email TEXT, contraseña TEXT, token TEXT)";
         db.execSQL(createUsuariosTableQuery);
 
         String createPapeleraTableQuery = "CREATE TABLE papelera (_id INTEGER PRIMARY KEY AUTOINCREMENT, idNota INTEGER, titulo TEXT, cuerpo TEXT)";
@@ -339,6 +339,90 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    public void guardarTokenUsuario(String email, String token) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("token", token);
+
+        try {
+            int rowsAffected = db.update("usuarios", values, "email=?", new String[]{email});
+            if (rowsAffected > 0) {
+                Log.d("DatabaseHelper", "Token guardado para el usuario: " + email);
+            } else {
+                Log.e("DatabaseHelper", "Error al guardar el token para el usuario: " + email);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
+    }
+    public void eliminarBaseDeDatos() {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            // Elimina las tablas existentes
+            db.execSQL("DROP TABLE IF EXISTS notas");
+            db.execSQL("DROP TABLE IF EXISTS usuarios");
+            db.execSQL("DROP TABLE IF EXISTS papelera");
+            // Recrea la base de datos
+            onCreate(db);
+            Log.d("DatabaseHelper", "Base de datos eliminada y recreada exitosamente");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+    }
+
+    public void eliminarTokenDeUsuario(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            ContentValues values = new ContentValues();
+            values.putNull("token");
+
+            int rowsAffected = db.update("usuarios", values, "email=?", new String[]{email});
+            if (rowsAffected > 0) {
+                Log.d("DatabaseHelper", "Token eliminado para el usuario: " + email);
+            } else {
+                Log.e("DatabaseHelper", "Error al eliminar el token para el usuario: " + email);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
+    }
+
+    public String obtenerEmailUsuarioActual() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { "email" };
+        String selection = "token IS NOT NULL"; // Suponiendo que el token se establece durante el inicio de sesión
+        Cursor cursor = null;
+        String emailUsuario = "";
+
+        try {
+            cursor = db.query("usuarios", columns, selection, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                emailUsuario = cursor.getString(cursor.getColumnIndex("email"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return emailUsuario;
+    }
+
 
 
 
