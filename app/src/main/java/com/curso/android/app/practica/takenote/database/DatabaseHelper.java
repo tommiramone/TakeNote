@@ -234,6 +234,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void restaurarNotaDesdePapelera(int notaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            // Obtener la nota de la tabla de papelera
+            Nota nota = obtenerNota(db, "papelera", notaId);
+
+            if (nota != null) {
+                ContentValues values = nota.toContentValues();
+
+                // Eliminar la nota de la Papelera
+                db.delete("papelera", "_id=?", new String[]{String.valueOf(notaId)});
+
+                // Insertar la nota en la tabla de Notas
+                long result = db.insertOrThrow("notas", null, values);
+                if (result != -1) {
+                    Log.d("DatabaseHelper", "Nota restaurada en la tabla de notas con éxito");
+                } else {
+                    Log.e("DatabaseHelper", "Error al restaurar la nota en la tabla de notas");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
+    }
 
 
 

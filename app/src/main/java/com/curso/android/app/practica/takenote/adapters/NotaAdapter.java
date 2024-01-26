@@ -21,10 +21,12 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     private List<DatabaseHelper.Nota> listaDeNotas;
     private Context context;
     private OnItemClickListener mListener;
+    private boolean isPapelera;
 
-    public NotaAdapter(List<DatabaseHelper.Nota> listaDeNotas, Context context) {
+    public NotaAdapter(List<DatabaseHelper.Nota> listaDeNotas, Context context, boolean isPapelera) {
         this.listaDeNotas = listaDeNotas;
         this.context = context;
+        this.isPapelera = isPapelera;
         dbHelper = DatabaseHelper.getInstance(context);
     }
 
@@ -33,6 +35,8 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         void onEditarClick(int position);
         void onEliminarClick(int position);
         void onEnviarAPapeleraClick(int position);
+
+        void onRestaurarClick(int position);
     }
 
 
@@ -43,8 +47,13 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     @NonNull
     @Override
     public NotaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("NotaAdapter", "onCreateViewHolder called");
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nota, parent, false);
+        // Inflar el diseño correspondiente según la Papelera o la pantalla principal
+        View itemView;
+        if (isPapelera) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nota_papelera, parent, false);
+        } else {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nota, parent, false);
+        }
         return new NotaViewHolder(itemView);
     }
 
@@ -66,6 +75,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         private TextView cuerpoTextView;
         private ImageView editarImageView;
         private ImageView eliminarImageView;
+        private ImageView restaurarImageView;
 
 
 
@@ -75,6 +85,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
             cuerpoTextView = itemView.findViewById(R.id.cuerpoNota);
             editarImageView = itemView.findViewById(R.id.iconoEditar);
             eliminarImageView = itemView.findViewById(R.id.iconoEliminar);
+            restaurarImageView = itemView.findViewById(R.id.iconoRestaurar);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,7 +134,24 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                     }
                 }
             });
+
+            if (restaurarImageView != null) {
+                restaurarImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+                            int position = getAdapterPosition();
+                            if (position != RecyclerView.NO_POSITION) {
+                                mListener.onRestaurarClick(position);
+                            }
+                        }
+                    }
+                });
+            }
+
         }
+
+
 
         public void bind(DatabaseHelper.Nota nota) {
             tituloTextView.setText(nota.getTitulo());
@@ -150,6 +178,17 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         listaDeNotas.remove(position);
         notifyItemRemoved(position);
     }
+
+    public void restaurarNotaDesdePapelera(int position) {
+        DatabaseHelper.Nota nota = listaDeNotas.get(position);
+        int notaId = nota.getId();
+        dbHelper.restaurarNotaDesdePapelera(notaId); // Llama al método de restaurarNotaDesdePapelera en tu helper
+        listaDeNotas.remove(position);
+        notifyItemRemoved(position);
+
+        Log.d("NotaAdapter", "Nota restaurada desde la papelera: " + nota.getTitulo());
+    }
+
 
     public void enviarNotaAPapelera(int position) {
         DatabaseHelper.Nota nota = listaDeNotas.get(position);

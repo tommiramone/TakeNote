@@ -30,7 +30,7 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        mNotaAdapter = new NotaAdapter(notas, this);
+        mNotaAdapter = new NotaAdapter(notas, this, false);
 
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -76,6 +76,10 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         mNotaAdapter.enviarNotaAPapelera(position);
     }
 
+    @Override
+    public void onRestaurarClick(int position) {
+
+    }
 
 
 }

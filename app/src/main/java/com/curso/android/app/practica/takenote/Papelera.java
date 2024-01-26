@@ -29,7 +29,7 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPapelera);
 
-        mNotaAdapter = new NotaAdapter(notasEnPapelera, this);
+        mNotaAdapter = new NotaAdapter(notasEnPapelera, this, true);
 
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -63,5 +63,11 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
     public void onEnviarAPapeleraClick(int position) {
         // Implementa el comportamiento cuando se hace clic en enviar a papelera en un elemento en la Papelera
         // Por ejemplo, podrías mover el elemento de nuevo a la lista principal de notas
+    }
+
+    public void onRestaurarClick(int position) {
+        mNotaAdapter.restaurarNotaDesdePapelera(position); // Llama al método en el adaptador para restaurar la nota
+
+        Log.d("PapeleraActivity", "Nota restaurada desde la papelera en posición: " + position);
     }
 }
