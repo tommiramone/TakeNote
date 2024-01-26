@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createTableQuery = "CREATE TABLE notas (_id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT, cuerpo TEXT)";
         db.execSQL(createTableQuery);
 
-        String createUsuariosTableQuery = "CREATE TABLE usuarios (_id INTEGER PRIMARY KEY, nombre TEXT, email TEXT, contraseña TEXT)";
+        String createUsuariosTableQuery = "CREATE TABLE usuarios (_id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, email TEXT, contraseña TEXT)";
         db.execSQL(createUsuariosTableQuery);
 
         String createPapeleraTableQuery = "CREATE TABLE papelera (_id INTEGER PRIMARY KEY AUTOINCREMENT, idNota INTEGER, titulo TEXT, cuerpo TEXT)";
@@ -45,20 +45,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    public void reiniciarPapelera() {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        try {
-            db.delete("papelera", null, null);
-            Log.d("DatabaseHelper", "Papelera reiniciada exitosamente");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (db.isOpen()) {
-                db.close();
-            }
-        }
-    }
+//    public void reiniciarPapelera() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        try {
+//            db.delete("papelera", null, null);
+//            Log.d("DatabaseHelper", "Papelera reiniciada exitosamente");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (db.isOpen()) {
+//                db.close();
+//            }
+//        }
+//    }
 
     public void insertarNota(String titulo, String cuerpo) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -109,6 +109,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public String getCuerpo() {
             return cuerpo;
         }
+    }
+
+    public class Usuario {
+        private int id;
+        private String nombre;
+        private String email;
+        private String contrasenia;
+
+        public Usuario(String nombre, String contrasenia, String email) {
+            this.nombre = nombre;
+            this.email = email;
+            this.contrasenia = contrasenia;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public String getEmail(){
+            return email;
+        }
+
+        public String getContrasenia(){
+            return contrasenia;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public void setContrasenia(String contrasenia) {
+            this.contrasenia = contrasenia;
+        }
+
+
     }
 
     public List<Nota> obtenerNotas(String tipo) {
@@ -264,6 +303,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void registrarUsuario(String nombre, String email, String contrasenia){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("nombre", nombre);
+        values.put("email", email);
+        values.put("contraseña", contrasenia);
+
+        long resultado = db.insert("usuarios", null, values);
+
+        if (resultado != -1) {
+            Log.d("DatabaseHelper", "Usuario registrado correctamente: " + nombre);
+        } else {
+            Log.e("DatabaseHelper", "Error al registrar el usuario: " + nombre);
+        }
+
+        db.close();
+    }
+
+    public boolean login(String email, String contrasenia) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { "email" };
+        String selection = "email=? and contraseña=?";
+        String[] selectionArgs = { email, contrasenia };
+        Cursor cursor = null;
+        try {
+            cursor = db.query("usuarios", columns, selection, selectionArgs, null, null, null);
+            int count = cursor.getCount();
+            return count > 0;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+    }
+
 
 
 }
+
+
+
