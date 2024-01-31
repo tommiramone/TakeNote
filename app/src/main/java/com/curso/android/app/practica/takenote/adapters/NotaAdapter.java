@@ -13,32 +13,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.curso.android.app.practica.takenote.R;
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder> {
-    private DatabaseHelper dbHelper;
     private List<DatabaseHelper.Nota> listaDeNotas;
+    private DatabaseHelper dbHelper;
     private Context context;
     private OnItemClickListener mListener;
     private boolean isPapelera;
 
-    public NotaAdapter(List<DatabaseHelper.Nota> listaDeNotas, Context context, boolean isPapelera) {
+    private String userId;
+
+    public NotaAdapter(List<DatabaseHelper.Nota> listaDeNotas, Context context, boolean isPapelera, String userId) {
+        this.userId = userId;
         this.listaDeNotas = listaDeNotas;
         this.context = context;
         this.isPapelera = isPapelera;
-        dbHelper = DatabaseHelper.getInstance(context);
+        dbHelper = new DatabaseHelper(context);
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
-        void onEditarClick(int position);
-        void onEliminarClick(int position);
-        void onEnviarAPapeleraClick(int position);
-
-        void onRestaurarClick(int position);
+        void onItemClick(String userId, int position);
+        void onEditarClick(String userId, int position);
+        void onEliminarClick(String userId, int position);
+        void onEnviarAPapeleraClick(String userId, int position);
+        void onRestaurarClick(String userId, int position);
     }
-
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
@@ -47,18 +50,19 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     @NonNull
     @Override
     public NotaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflar el diseño correspondiente según la Papelera o la pantalla principal
         View itemView;
         if (isPapelera) {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nota_papelera, parent, false);
         } else {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nota, parent, false);
         }
+        Log.d("NotaAdapter", "onCreateViewHolder: ViewHolder creado");
         return new NotaViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NotaViewHolder holder, int position) {
+        Log.d("NotaAdapter", "onBindViewHolder: Llamado para la posición " + position);
         Log.d("NotaAdapter", "onBindViewHolder called for position: " + position);
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
         holder.bind(nota);
@@ -66,18 +70,18 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
 
     @Override
     public int getItemCount() {
+        Log.d("NotaAdapter", "getItemCount: " + listaDeNotas.size() + " notas en la lista");
         return listaDeNotas.size();
     }
 
     public class NotaViewHolder extends RecyclerView.ViewHolder {
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
         private TextView tituloTextView;
         private TextView cuerpoTextView;
         private ImageView editarImageView;
         private ImageView eliminarImageView;
         private ImageView restaurarImageView;
 
-
+        private String userId; // Agregar userId como campo en el adapter
 
         public NotaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,31 +97,19 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                     if (mListener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            mListener.onItemClick(position);
+                            mListener.onItemClick(userId, position);
                         }
                     }
                 }
             });
 
-            // Configurar clic en el ícono de editar
             editarImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            mListener.onEditarClick(position);
-                        }
-                    }
-                }
-            });
-            editarImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            mListener.onEditarClick(position);
+                            mListener.onEditarClick(userId, position);
                         }
                     }
                 }
@@ -129,7 +121,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                     if (mListener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            mListener.onEliminarClick(position);
+                            mListener.onEliminarClick(userId, position);
                         }
                     }
                 }
@@ -142,16 +134,13 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                         if (mListener != null) {
                             int position = getAdapterPosition();
                             if (position != RecyclerView.NO_POSITION) {
-                                mListener.onRestaurarClick(position);
+                                mListener.onRestaurarClick(userId, position);
                             }
                         }
                     }
                 });
             }
-
         }
-
-
 
         public void bind(DatabaseHelper.Nota nota) {
             tituloTextView.setText(nota.getTitulo());
@@ -164,6 +153,15 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         notifyDataSetChanged();
     }
 
+    public String obtenerUsuarioActual() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return user.getUid();
+        } else {
+            return null;
+        }
+    }
+
     public DatabaseHelper.Nota getNota(int position) {
         if (listaDeNotas.isEmpty() || position < 0 || position >= listaDeNotas.size()) {
             return null;
@@ -171,33 +169,30 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         return listaDeNotas.get(position);
     }
 
-    public void eliminarNota(int position) {
+//    public void eliminarNota(int position) {
+//        DatabaseHelper.Nota nota = listaDeNotas.get(position);
+//        int notaId = nota.getId();
+//        dbHelper.eliminarNota(userId, notaId);
+//        listaDeNotas.remove(position);
+//        notifyItemRemoved(position);
+//    }
+
+    public void enviarNotaAPapelera(String userId, int position) {
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
         int notaId = nota.getId();
-        dbHelper.eliminarNota(notaId);
+        Log.d("NotaAdapter", "Nota eliminada: ID=" + notaId + ", Título=" + nota.getTitulo());
+        dbHelper.enviarNotaAPapelera(userId, notaId);
         listaDeNotas.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restaurarNotaDesdePapelera(int position) {
+    public void restaurarNotaDesdePapelera(String userId, int position) {
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
         int notaId = nota.getId();
-        dbHelper.restaurarNotaDesdePapelera(notaId); // Llama al método de restaurarNotaDesdePapelera en tu helper
-        listaDeNotas.remove(position);
-        notifyItemRemoved(position);
-
-        Log.d("NotaAdapter", "Nota restaurada desde la papelera: " + nota.getTitulo());
-    }
-
-
-    public void enviarNotaAPapelera(int position) {
-        DatabaseHelper.Nota nota = listaDeNotas.get(position);
-        int notaId = nota.getId();
-        dbHelper.enviarNotaAPapelera(notaId);
+        Log.d("NotaAdapter", "Restaurando nota desde la papelera: ID=" + notaId + ", Título=" + nota.getTitulo());
+        dbHelper.restaurarNotaDesdePapelera(obtenerUsuarioActual(), notaId);
         listaDeNotas.remove(position);
         notifyItemRemoved(position);
     }
-
 
 }
-
