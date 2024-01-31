@@ -43,8 +43,19 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="30dp"
                 android:src="@drawable/config"
+                app:tint="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/iconoCerrarSesion"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/logout"
                 app:tint="@android:color/white" />
 
             <androidx.appcompat.widget.SearchView

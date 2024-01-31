@@ -3,6 +3,7 @@ package com.curso.android.app.practica.takenote;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,8 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
 
         dbHelper = DatabaseHelper.getInstance(this);
 
+//        dbHelper.eliminarBaseDeDatos();
+
         List<DatabaseHelper.Nota> notas = dbHelper.obtenerNotas("notas");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -39,12 +42,22 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         mNotaAdapter.setOnItemClickListener(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Home.this, Nueva.class);
                 startActivity(intent);
+            }
+        });
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userEmail = obtenerEmailUsuario();
+
+                cerrarSesion(userEmail);
             }
         });
     }
@@ -80,6 +93,25 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
     public void onRestaurarClick(int position) {
 
     }
+
+    private void cerrarSesion(String email) {
+        eliminarTokenDeBaseDeDatos(email);
+
+        Intent intent = new Intent(Home.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+
+    private void eliminarTokenDeBaseDeDatos(String email) {
+        dbHelper.eliminarTokenDeUsuario(email);
+    }
+
+    private String obtenerEmailUsuario() {
+        return dbHelper.obtenerEmailUsuarioActual();
+    }
+
 
 
 }
