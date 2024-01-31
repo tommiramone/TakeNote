@@ -31,19 +31,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableQuery = "CREATE TABLE notas (_id INTEGER PRIMARY KEY, titulo TEXT, cuerpo TEXT)";
+        String createTableQuery = "CREATE TABLE notas (_id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT, cuerpo TEXT)";
         db.execSQL(createTableQuery);
 
         String createUsuariosTableQuery = "CREATE TABLE usuarios (_id INTEGER PRIMARY KEY, nombre TEXT, email TEXT, contraseña TEXT)";
         db.execSQL(createUsuariosTableQuery);
 
-        String createPapeleraTableQuery = "CREATE TABLE papelera (_id INTEGER PRIMARY KEY, idNota INTEGER, titulo TEXT, cuerpo TEXT)";
+        String createPapeleraTableQuery = "CREATE TABLE papelera (_id INTEGER PRIMARY KEY AUTOINCREMENT, idNota INTEGER, titulo TEXT, cuerpo TEXT)";
         db.execSQL(createPapeleraTableQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Manejar actualizaciones de la base de datos si es necesario
+    }
+
+    public void reiniciarPapelera() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            db.delete("papelera", null, null);
+            Log.d("DatabaseHelper", "Papelera reiniciada exitosamente");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
     }
 
     public void insertarNota(String titulo, String cuerpo) {
@@ -174,5 +188,82 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return null;
     }
+
+    public void eliminarNota(int notaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            db.delete("notas", "_id=?", new String[]{String.valueOf(notaId)});
+            Log.d("DatabaseHelper", "Nota eliminada exitosamente");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
+    }
+
+    public void enviarNotaAPapelera(int notaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            // Obtener la nota de la tabla de notas
+            Nota nota = obtenerNota(db, "notas", notaId);
+
+            if (nota != null) {
+                ContentValues values = new ContentValues();
+                values.put("idNota", notaId);
+                values.put("titulo", nota.getTitulo());
+                values.put("cuerpo", nota.getCuerpo());
+
+                long result = db.insertOrThrow("papelera", null, values);
+                if (result != -1) {
+                    Log.d("DatabaseHelper", "Nota insertada en la papelera con éxito");
+                } else {
+                    Log.e("DatabaseHelper", "Error al insertar la nota en la papelera");
+                }
+                eliminarNota(notaId); //
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
+    }
+
+    public void restaurarNotaDesdePapelera(int notaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            // Obtener la nota de la tabla de papelera
+            Nota nota = obtenerNota(db, "papelera", notaId);
+
+            if (nota != null) {
+                ContentValues values = nota.toContentValues();
+
+                // Eliminar la nota de la Papelera
+                db.delete("papelera", "_id=?", new String[]{String.valueOf(notaId)});
+
+                // Insertar la nota en la tabla de Notas
+                long result = db.insertOrThrow("notas", null, values);
+                if (result != -1) {
+                    Log.d("DatabaseHelper", "Nota restaurada en la tabla de notas con éxito");
+                } else {
+                    Log.e("DatabaseHelper", "Error al restaurar la nota en la tabla de notas");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
+    }
+
+
 
 }

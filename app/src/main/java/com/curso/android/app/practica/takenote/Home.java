@@ -30,7 +30,7 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        mNotaAdapter = new NotaAdapter(notas, this);
+        mNotaAdapter = new NotaAdapter(notas, this, false);
 
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -51,15 +51,6 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
 
     @Override
     public void onItemClick(int position) {
-        DatabaseHelper.Nota nota = mNotaAdapter.getNota(position);
-
-        if (nota != null) {
-            Intent intent = new Intent(Home.this, Editar.class);
-            intent.putExtra("ID_NOTA", nota.getId());
-            intent.putExtra("TITULO_NOTA", nota.getTitulo());
-            intent.putExtra("CUERPO_NOTA", nota.getCuerpo());
-            startActivity(intent);
-        }
     }
 
     @Override
@@ -75,6 +66,20 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         }
     }
 
+    @Override
+    public void onEliminarClick(int position) {
+        mNotaAdapter.enviarNotaAPapelera(position);
+    }
+
+    @Override
+    public void onEnviarAPapeleraClick(int position) {
+        mNotaAdapter.enviarNotaAPapelera(position);
+    }
+
+    @Override
+    public void onRestaurarClick(int position) {
+
+    }
 
 
 }
