@@ -1,5 +1,7 @@
 package com.curso.android.app.practica.takenote;
 
+import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
+import com.curso.android.app.practica.takenote.utils.temaUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,6 +26,9 @@ public class Nueva extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nueva_nota);
+
+        boolean isDarkTheme = loadThemeState(this);
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
 
         dbHelper = DatabaseHelper.getInstance(this);
 

@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_dark"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:id="@+id/mainCoordinatorLayout"
+    >
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/background_light"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -35,39 +35,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:background="@android:color/black"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:id="@+id/mainLinearLayout"
+        >
 
         <EditText
             android:id="@+id/editTituloNota"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Título de la Nota"
-            android:textColor="@android:color/white"
+            android:paddingLeft="8dp"
             android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editCuerpoNota"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="8dp"
             android:hint="Cuerpo"
-            android:textColor="@android:color/white"
             android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/btnAdjuntarImagen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Adjuntar Imagen"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center" />
-
-        <ImageView
-            android:id="@+id/imagenAdjunta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnGuardar"

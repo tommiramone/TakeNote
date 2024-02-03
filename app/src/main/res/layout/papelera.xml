@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@android:color/background_dark">
+    android:id="@+id/mainCoordinatorLayout"
+    >
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -30,22 +31,49 @@
                 android:textSize="60sp" />
         </RelativeLayout>
 
-        <!-- SearchView encima de la AppBarLayout -->
         <RelativeLayout
-            android:id="@+id/searchLayout"
+            android:id="@+id/mainLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iconoConfig"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="60dp"
+                android:src="@drawable/config" />
+
+            <ImageView
+                android:id="@+id/iconoTrash"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="30dp"
+                android:src="@drawable/trash" />
+
+            <ImageView
+                android:id="@+id/iconoCerrarSesion"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/logout_dark" />
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/black"
+                android:layout_toLeftOf="@id/iconoTrash"
                 android:iconifiedByDefault="false"
-                android:textColor="@android:color/white"
-                android:imeOptions="actionSearch"
-                app:theme="@style/MySearchViewStyle"
-                app:defaultQueryHint="" />
+                android:imeOptions="actionSearch" />
         </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -55,10 +83,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_below="@id/appBarLayout"
-        android:background="@android:color/black">
+        android:layout_below="@id/appBarLayout">
 
-        <!-- RecyclerView para mostrar las notas -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewPapelera"
             android:layout_width="match_parent"

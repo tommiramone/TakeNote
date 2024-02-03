@@ -1,5 +1,8 @@
 package com.curso.android.app.practica.takenote;
 
+import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -9,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.curso.android.app.practica.takenote.adapters.NotaAdapter;
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
+import com.curso.android.app.practica.takenote.utils.temaUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,6 +27,9 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.papelera);
 
+        boolean isDarkTheme = loadThemeState(this);
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
+
         dbHelper = DatabaseHelper.getInstance(this);
 //        dbHelper.eliminarYRecrearBaseDeDatos();
 
@@ -35,6 +42,14 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
 
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if(isDarkTheme == true){
+            mNotaAdapter.setTextColor(Color.WHITE);
+            mNotaAdapter.setImageColor(Color.WHITE);
+        } else {
+            mNotaAdapter.setTextColor(Color.BLACK);
+            mNotaAdapter.setImageColor(Color.BLACK);
+        }
 
         mNotaAdapter.setNotas(notasEnPapelera);
         mNotaAdapter.setOnItemClickListener(this);

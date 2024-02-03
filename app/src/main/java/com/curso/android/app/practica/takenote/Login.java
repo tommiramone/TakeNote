@@ -1,5 +1,7 @@
 package com.curso.android.app.practica.takenote;
 
+import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.curso.android.app.practica.takenote.utils.temaUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -21,6 +25,9 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        boolean isDarkTheme = loadThemeState(this);
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
 
         mAuth = FirebaseAuth.getInstance();
 
