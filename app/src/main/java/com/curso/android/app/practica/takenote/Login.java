@@ -2,78 +2,65 @@ package com.curso.android.app.practica.takenote;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.curso.android.app.practica.takenote.database.DatabaseHelper;
-
-import java.security.SecureRandom;
-import java.math.BigInteger;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
-    DatabaseHelper databaseHelper;
+
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        databaseHelper = new DatabaseHelper(this);
+        mAuth = FirebaseAuth.getInstance();
 
+        EditText emailEditText = findViewById(R.id.editTextUsername);
+        EditText passwordEditText = findViewById(R.id.editTextPassword);
         Button buttonLogin = findViewById(R.id.buttonLogin);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText contraseniaEditText = findViewById(R.id.editTextPassword);
-                EditText emailEditText = findViewById(R.id.editTextUsername);
-                String contrasenia = contraseniaEditText.getText().toString();
-                String email = emailEditText.getText().toString();
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
 
-                if (validarCredenciales(email, contrasenia)) {
-                    // Credenciales válidas, permitir acceso y generar token
-                    String token = generarToken();
-                    guardarTokenEnBaseDeDatos(email, token);
 
-                    // Por ejemplo, iniciar una nueva actividad
-                    Intent intent = new Intent(Login.this, Home.class);
-                    startActivity(intent);
-                    finish(); // Finaliza la actividad de login para evitar volver atrás
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(Login.this, "Por favor, completa todos los campos.", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Credenciales inválidas, mostrar mensaje de error
-                    Toast.makeText(Login.this, "Credenciales inválidas", Toast.LENGTH_SHORT).show();
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Inicio de sesión exitoso
+                                        Toast.makeText(Login.this, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(Login.this, Home.class);
+                                        startActivity(intent);
+                                        finish(); // Finaliza la actividad de login
+                                    } else {
+                                        // Error durante el inicio de sesión
+                                        Toast.makeText(Login.this, "Error al iniciar sesión. Verifica tus credenciales.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             }
         });
 
-    }
-
-    public boolean validarCredenciales(String email, String contrasenia){
-        boolean credencialesValidas = databaseHelper.login(email, contrasenia);
-
-        if (credencialesValidas) {
-            Log.d("LoginActivity", "Inicio de sesión exitoso para el usuario: " + email);
-        } else {
-            Log.d("LoginActivity", "Inicio de sesión fallido para el usuario: " + email);
+        if (mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(Login.this, Home.class));
+            finish();
         }
-
-        return credencialesValidas;
-    }
-
-    // Método para generar un token aleatorio y seguro
-    private String generarToken() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] tokenBytes = new byte[64];
-        secureRandom.nextBytes(tokenBytes);
-        return new BigInteger(1, tokenBytes).toString(16); // Representación hexadecimal
-    }
-
-    // Método para guardar el token en la base de datos
-    private void guardarTokenEnBaseDeDatos(String email, String token) {
-       databaseHelper.guardarTokenUsuario(email, token);
     }
 }
