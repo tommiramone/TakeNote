@@ -1,6 +1,7 @@
 package com.curso.android.app.practica.takenote.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,20 +20,37 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 
 public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder> {
+
+
     private List<DatabaseHelper.Nota> listaDeNotas;
     private DatabaseHelper dbHelper;
     private Context context;
     private OnItemClickListener mListener;
     private boolean isPapelera;
+    private Integer textColor;
 
     private String userId;
+    private Integer imageColor;
 
     public NotaAdapter(List<DatabaseHelper.Nota> listaDeNotas, Context context, boolean isPapelera, String userId) {
         this.userId = userId;
         this.listaDeNotas = listaDeNotas;
         this.context = context;
+        this.textColor = null;
+        this.imageColor = null;
         this.isPapelera = isPapelera;
         dbHelper = new DatabaseHelper(context);
+    }
+
+
+    public void setTextColor(int color) {
+        this.textColor = color;
+        notifyDataSetChanged();
+    }
+
+    public void setImageColor(int color){
+        this.imageColor = color;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {
@@ -65,7 +83,14 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         Log.d("NotaAdapter", "onBindViewHolder: Llamado para la posición " + position);
         Log.d("NotaAdapter", "onBindViewHolder called for position: " + position);
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
-        holder.bind(nota);
+
+        if (textColor != null) {
+            holder.bind(nota, textColor.intValue());
+        } else {
+            holder.bind(nota, Color.BLACK); //
+        }
+
+
     }
 
     @Override
@@ -127,6 +152,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                 }
             });
 
+
             if (restaurarImageView != null) {
                 restaurarImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -142,11 +168,27 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
             }
         }
 
-        public void bind(DatabaseHelper.Nota nota) {
+        public void bind(DatabaseHelper.Nota nota, int textColor) {
             tituloTextView.setText(nota.getTitulo());
             cuerpoTextView.setText(nota.getCuerpo());
+
+            tituloTextView.setTextColor(textColor);
+            cuerpoTextView.setTextColor(textColor);
+
+            if (imageColor != null) {
+                eliminarImageView.setColorFilter(imageColor.intValue());
+                editarImageView.setColorFilter(imageColor.intValue());
+            }
+
+            if (restaurarImageView != null && imageColor != null) {
+                restaurarImageView.setColorFilter(imageColor.intValue());
+            }
         }
+
+
     }
+
+
 
     public void setNotas(List<DatabaseHelper.Nota> notas) {
         this.listaDeNotas = notas;
@@ -169,14 +211,6 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         return listaDeNotas.get(position);
     }
 
-//    public void eliminarNota(int position) {
-//        DatabaseHelper.Nota nota = listaDeNotas.get(position);
-//        int notaId = nota.getId();
-//        dbHelper.eliminarNota(userId, notaId);
-//        listaDeNotas.remove(position);
-//        notifyItemRemoved(position);
-//    }
-
     public void enviarNotaAPapelera(String userId, int position) {
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
         int notaId = nota.getId();
@@ -194,5 +228,8 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         listaDeNotas.remove(position);
         notifyItemRemoved(position);
     }
+
+
+
 
 }

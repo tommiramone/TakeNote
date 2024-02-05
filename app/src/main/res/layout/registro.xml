@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_dark">
+    android:id="@+id/mainCoordinatorLayout"
+    >
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -34,14 +35,16 @@
         android:padding="36dp"
         android:layout_below="@id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/mainLinearLayout"
+        >
 
         <EditText
             android:id="@+id/editTextUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColor="@android:color/white"
+            android:paddingLeft="8dp"
             android:hint="Nombre de Usuario"
             android:inputType="text" />
 
@@ -51,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextUsername"
             android:layout_marginTop="8dp"
-            android:textColor="@android:color/white"
+            android:paddingLeft="8dp"
             android:hint="Correo Electrónico"
             android:inputType="textEmailAddress" />
 
@@ -61,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextEmail"
             android:layout_marginTop="8dp"
-            android:textColor="@android:color/white"
+            android:paddingLeft="8dp"
             android:hint="Contraseña"
             android:inputType="textPassword" />
 
@@ -75,15 +78,15 @@
             android:backgroundTint="@color/blue" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/appBarLayout"
-        android:layout_marginTop="20dp"
-        android:text="Registro de Usuario"
-        android:textColor="@android:color/white"
-        android:textSize="30sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/title"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_below="@id/appBarLayout"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="Registro de Usuario"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:textSize="30sp" />-->
 
 </RelativeLayout>
