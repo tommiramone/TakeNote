@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "118495236875",
+    "project_id": "takenote-5f5e5",
+    "storage_bucket": "takenote-5f5e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118495236875:android:314563921355250628c80e",
+        "android_client_info": {
+          "package_name": "com.curso.android.app.practica.takenote"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyPJhjY9Ldo2-DLeHzI-GKDdsum1M7CjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
