@@ -36,7 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/mainLinearLayout"
-
         >
 
         <EditText
@@ -66,6 +65,19 @@
             android:layout_marginTop="16dp"
             android:text="Iniciar Sesión"
             android:backgroundTint="@color/blue" />
+
+        <!-- Agrega el texto "¿No tienes cuenta? Regístrate" debajo del botón -->
+        <TextView
+            android:id="@+id/textViewRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttonLogin"
+            android:layout_marginTop="16dp"
+            android:text="¿No tienes cuenta? Regístrate"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:onClick="goToRegisterActivity" />
     </RelativeLayout>
 
 
