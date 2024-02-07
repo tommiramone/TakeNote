@@ -3,6 +3,8 @@ package com.curso.android.app.practica.takenote;
 
 import static android.content.ContentValues.TAG;
 
+import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.curso.android.app.practica.takenote.utils.temaUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +28,9 @@ public class Gestion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gestion);
+
+        boolean isDarkTheme = loadThemeState(this);
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
 
         Button borrarCuenta = findViewById(R.id.textViewBorrarCuenta);
         borrarCuenta.setOnClickListener(new View.OnClickListener() {

@@ -26,7 +26,6 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <!-- Alinea el contenedor de texto al inicio -->
     <ImageView
         android:id="@+id/iconoEditar"
         android:layout_width="24dp"

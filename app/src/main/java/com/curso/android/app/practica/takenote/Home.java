@@ -34,6 +34,11 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            dirigirALogin();
+        }
+
         boolean isDarkTheme = loadThemeState(this);
         temaUtils.applyThemeToActivity(this, isDarkTheme);
 
@@ -113,11 +118,19 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        // Actualizar la lista de notas u otros datos necesarios aquí
         actualizarListaDeNotas();
 
         boolean isDarkTheme = loadThemeState(this);
         temaUtils.applyThemeToActivity(this, isDarkTheme);
+
+        if(isDarkTheme == true){
+            mNotaAdapter.setTextColor(Color.WHITE);
+            mNotaAdapter.setImageColor(Color.WHITE);
+        } else {
+            mNotaAdapter.setTextColor(Color.BLACK);
+            mNotaAdapter.setImageColor(Color.BLACK);
+        }
+
     }
 
     @Override
@@ -181,6 +194,12 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         mNotaAdapter.notifyDataSetChanged();
     }
 
+    private void dirigirALogin() {
+        Intent intent = new Intent(Home.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish(); // Finalizar la actividad actual
+    }
 
 
 

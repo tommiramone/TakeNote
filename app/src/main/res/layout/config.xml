@@ -13,24 +13,27 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/blue"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            android:layout_height="122dp"
+            android:background="@color/blue">
 
             <TextView
                 android:id="@+id/toolbarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Configuración"
-                android:textSize="24sp" />
-
-        </androidx.appcompat.widget.Toolbar>
-
+                android:text="Take Note"
+                android:textSize="60sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center" />
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -38,56 +41,57 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
+        android:gravity="center_vertical"
         android:id="@+id/mainLinearLayout"
-        android:padding="16dp">
+        >
 
-        <TextView
-            android:id="@+id/textoModoOscuro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Modo Oscuro"
-            android:textSize="18sp" />
-
-        <Switch
-            android:id="@+id/switchDarkMode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:checked="false"
-            android:textOff="Off"
-            android:textOn="On"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <SeekBar
-            android:id="@+id/fontSizeSeekBar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:max="20"
-            android:progress="10" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal">
 
+            <TextView
+                android:id="@+id/textoModoOscuro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modo Oscuro"
+                android:textSize="24sp" />
+
+            <Switch
+                android:id="@+id/switchDarkMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:checked="false"
+                android:textOff="Off"
+                android:textOn="On"
+                tools:ignore="TouchTargetSizeCheck" />
+        </LinearLayout>
 
         <TextView
-           android:id="@+id/textGestionCuenta"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Gestionar Cuenta"
-           android:textSize="18sp"
-           android:layout_marginTop="16dp"
+            android:id="@+id/textGestionCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gestionar Cuenta"
+            android:textSize="24sp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:onClick="goToGestion"/>
 
 
-        <TextView
-            android:id="@+id/textViewHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ir a la Home"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:onClick="goToHome" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewHome"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Ir a la Home"-->
+<!--            android:textColor="@color/blue"-->
+<!--            android:textSize="16sp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:clickable="true"-->
+<!--            android:onClick="goToHome" />-->
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

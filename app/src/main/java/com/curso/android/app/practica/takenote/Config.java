@@ -62,11 +62,7 @@ public class Config extends AppCompatActivity {
     }
 
     private void applyThemeBasedOnSwitch(boolean isDarkTheme) {
-        if (isDarkTheme) {
-            temaUtils.applyDarkTheme(this);
-        } else {
-            temaUtils.applyLightTheme(this);
-        }
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
     }
 
     public void goToHome(View view) {
