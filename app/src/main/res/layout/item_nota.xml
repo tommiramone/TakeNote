@@ -14,35 +14,36 @@
 
         <TextView
             android:id="@+id/tituloNota"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/cuerpoNota"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="14sp" />
     </LinearLayout>
 
-
+    <!-- Alinea el contenedor de texto al inicio -->
     <ImageView
         android:id="@+id/iconoEditar"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_toRightOf="@id/layoutContenido"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/edit"
-        android:layout_marginEnd="4dp" />
-
+        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@id/layoutContenido"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/edit" />
 
     <ImageView
         android:id="@+id/iconoEliminar"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_toRightOf="@id/iconoEditar"
-        android:src="@drawable/trash"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@id/iconoEditar"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/trash" />
+
 </RelativeLayout>
+

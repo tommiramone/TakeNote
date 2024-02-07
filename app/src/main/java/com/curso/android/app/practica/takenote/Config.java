@@ -74,5 +74,10 @@ public class Config extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goToGestion(View view) {
+        Intent intent = new Intent(this, Gestion.class);
+        startActivity(intent);
+    }
+
 }
 
