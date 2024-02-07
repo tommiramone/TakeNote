@@ -12,25 +12,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Título de la nota -->
         <TextView
             android:id="@+id/tituloNota"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@android:color/white"/>
+            android:textSize="18sp" />
 
-        <!-- Cuerpo de la nota -->
         <TextView
             android:id="@+id/cuerpoNota"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"/>
+            android:textSize="14sp" />
     </LinearLayout>
 
-    <!-- ImageView de editar -->
+
     <ImageView
         android:id="@+id/iconoEditar"
         android:layout_width="24dp"
@@ -38,10 +34,9 @@
         android:layout_toRightOf="@id/layoutContenido"
         android:layout_marginStart="8dp"
         android:src="@drawable/edit"
-        android:layout_marginEnd="4dp"
-        app:tint="@android:color/white" />
+        android:layout_marginEnd="4dp" />
 
-    <!-- ImageView de eliminar -->
+
     <ImageView
         android:id="@+id/iconoEliminar"
         android:layout_width="24dp"
@@ -49,6 +44,5 @@
         android:layout_toRightOf="@id/iconoEditar"
         android:src="@drawable/trash"
         android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        app:tint="@android:color/white" />
+        android:layout_marginEnd="8dp" />
 </RelativeLayout>

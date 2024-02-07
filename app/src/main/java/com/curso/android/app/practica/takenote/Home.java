@@ -1,6 +1,9 @@
 package com.curso.android.app.practica.takenote;
 
+import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
+
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.curso.android.app.practica.takenote.adapters.NotaAdapter;
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
+import com.curso.android.app.practica.takenote.utils.temaUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +33,10 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+        boolean isDarkTheme = loadThemeState(this);
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
+
 
         dbHelper = DatabaseHelper.getInstance(this);
 //        dbHelper.eliminarYRecrearBaseDeDatos();
@@ -50,6 +58,15 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         mNotaAdapter = new NotaAdapter(notas, this, false, userId);
         Log.d("Home", "Adapter created");
 
+        if(isDarkTheme == true){
+            mNotaAdapter.setTextColor(Color.WHITE);
+            mNotaAdapter.setImageColor(Color.WHITE);
+        } else {
+            mNotaAdapter.setTextColor(Color.BLACK);
+            mNotaAdapter.setImageColor(Color.BLACK);
+        }
+
+
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -59,6 +76,24 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
 
         FloatingActionButton fab = findViewById(R.id.fab);
         ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
+        iconoConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, Config.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView iconoTrash = findViewById(R.id.iconoTrash);
+        iconoTrash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, Papelera.class);
+                startActivity(intent);
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,4 +162,11 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         startActivity(intent);
         finish();
     }
+
+
+
+
+
+
+
 }
