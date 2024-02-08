@@ -5,7 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
-    <!-- Contenedor del título y cuerpo -->
     <LinearLayout
         android:id="@+id/layoutContenido"
         android:layout_width="wrap_content"

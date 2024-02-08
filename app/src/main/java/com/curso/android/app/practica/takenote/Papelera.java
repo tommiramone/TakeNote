@@ -2,9 +2,12 @@ package com.curso.android.app.practica.takenote;
 
 import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,6 +54,15 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
             mNotaAdapter.setImageColor(Color.BLACK);
         }
 
+        ImageView iconoHome = findViewById(R.id.iconoHome);
+        iconoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
+            }
+        });
+
         mNotaAdapter.setNotas(notasEnPapelera);
         mNotaAdapter.setOnItemClickListener(this);
     }
@@ -77,8 +89,6 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
 
     @Override
     public void onEditarClick(String userId, int position ) {
-        // Implementa el comportamiento cuando se hace clic en editar en un elemento en la Papelera
-        // Por ejemplo, podrías abrir una vista de edición para el elemento seleccionado
     }
 
     @Override
@@ -101,4 +111,6 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
             Log.d("PapeleraActivity", "Error en metodo");
         }
     }
+
+
 }

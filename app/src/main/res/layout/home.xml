@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="Take Note"
+                android:textColor="@color/white"
                 android:textSize="60sp" />
         </RelativeLayout>
 
@@ -74,7 +75,7 @@
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/iconoTrash" />
+                android:layout_toLeftOf="@id/iconoConfig" />
         </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

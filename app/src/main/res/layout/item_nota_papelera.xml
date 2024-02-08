@@ -11,14 +11,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Título de la nota -->
         <TextView
             android:id="@+id/tituloNota"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp" />
 
-        <!-- Cuerpo de la nota -->
         <TextView
             android:id="@+id/cuerpoNota"
             android:layout_width="match_parent"
@@ -27,23 +25,30 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <!-- ImageView de editar -->
+
     <ImageView
         android:id="@+id/iconoRestaurar"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_toRightOf="@id/layoutContenido"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/back"
-        android:layout_marginEnd="4dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@id/layoutContenido"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/back" />
 
     <ImageView
         android:id="@+id/iconoEditar"
-        android:layout_width="24dp"
-        android:layout_height="24dp"/>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@id/layoutContenido"
+        android:layout_marginEnd="32dp" />
+
     <ImageView
         android:id="@+id/iconoEliminar"
-        android:layout_width="24dp"
-        android:layout_height="24dp"/>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@id/iconoEditar"
+        android:layout_marginEnd="64dp" />
 
 </RelativeLayout>
