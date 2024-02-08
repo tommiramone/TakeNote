@@ -72,7 +72,7 @@
 
             <androidx.appcompat.widget.SearchView
                 android:theme="@style/AppTheme.Toolbar"
-                android:id="@+id/searchView"
+                android:id="@+id/searchViewPapelera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/iconoConfig" />

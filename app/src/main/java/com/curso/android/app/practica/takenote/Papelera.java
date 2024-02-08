@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,6 +55,25 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
             mNotaAdapter.setImageColor(Color.BLACK);
         }
 
+        SearchView searchViewPapelera = findViewById(R.id.searchViewPapelera);
+
+        searchViewPapelera.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    actualizarListaDeNotasPapelera();
+                } else {
+                    mNotaAdapter.filterPapelera(newText);
+                }
+                return true;
+            }
+        });
+
         ImageView iconoHome = findViewById(R.id.iconoHome);
         iconoHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,8 +98,21 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
         }
     }
 
+    private void actualizarListaDeNotasPapelera() {
+        String userId = obtenerUsuarioActual();
+        List<DatabaseHelper.Nota> notasPapelera = obtenerNotasEnPapelera();
+
+        mNotaAdapter.setNotas(notasPapelera);
+        mNotaAdapter.notifyDataSetChanged();
+    }
+
     private List<DatabaseHelper.Nota> obtenerNotasEnPapelera() {
         return dbHelper.obtenerNotas("papelera", obtenerUsuarioActual());
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        actualizarListaDeNotasPapelera();
     }
 
     @Override

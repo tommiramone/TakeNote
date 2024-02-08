@@ -19,12 +19,16 @@ import com.curso.android.app.practica.takenote.database.DatabaseHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder> {
 
 
-    private List<DatabaseHelper.Nota> listaDeNotas;
+    private List<DatabaseHelper.Nota> listaDeNotas; // Lista original de todas las notas
+    private List<DatabaseHelper.Nota> mFilteredNotas; // Lista filtrada de notas para mostrar
+    private List<DatabaseHelper.Nota> listaDeNotasOriginales; // Lista original de todas las notas
     private DatabaseHelper dbHelper;
     private Context context;
     private OnItemClickListener mListener;
@@ -42,6 +46,10 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         this.imageColor = null;
         this.isPapelera = isPapelera;
         dbHelper = new DatabaseHelper(context);
+
+        mFilteredNotas = new ArrayList<>(listaDeNotas);
+
+        listaDeNotasOriginales = new ArrayList<>(listaDeNotas);
     }
 
 
@@ -116,8 +124,6 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                 }
             }
         });
-
-
     }
 
     @Override
@@ -217,11 +223,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
                 restaurarImageView.setColorFilter(imageColor.intValue());
             }
         }
-
-
     }
-
-
 
     public void setNotas(List<DatabaseHelper.Nota> notas) {
         this.listaDeNotas = notas;
@@ -264,5 +266,43 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
 
 
 
+
+    public void filter(String searchText) {
+        searchText = searchText.toLowerCase(Locale.getDefault());
+        mFilteredNotas.clear();
+
+        if (searchText.isEmpty()) {
+            mFilteredNotas.addAll(listaDeNotasOriginales);
+        } else {
+            for (DatabaseHelper.Nota nota : listaDeNotasOriginales) {
+                if (nota.getTitulo().toLowerCase(Locale.getDefault()).contains(searchText)) {
+                    mFilteredNotas.add(nota);
+                }
+            }
+        }
+
+        listaDeNotas.clear();
+        listaDeNotas.addAll(mFilteredNotas);
+        notifyDataSetChanged();
+    }
+
+    public void filterPapelera(String searchText) {
+        searchText = searchText.toLowerCase(Locale.getDefault());
+        mFilteredNotas.clear();
+
+        if (searchText.isEmpty()) {
+            mFilteredNotas.addAll(listaDeNotasOriginales);
+        } else {
+            for (DatabaseHelper.Nota nota : listaDeNotasOriginales) {
+                if (nota.getTitulo().toLowerCase(Locale.getDefault()).contains(searchText)) {
+                    mFilteredNotas.add(nota);
+                }
+            }
+        }
+
+        listaDeNotas.clear();
+        listaDeNotas.addAll(mFilteredNotas);
+        notifyDataSetChanged();
+    }
 
 }
