@@ -8,6 +8,6 @@ La aplicación cuenta con registro e inicio de sesión. Cada usuario logueado pu
 
 Para mas información sobre el desarrollo acudir a los siguientes archivos: 
 
-·[https://github.com/tommiramone/TakeNote/blob/master/Documentacio%CC%81n%20detallada%20del%20proyecto%206e24871191634b05a05fbeccc353713a.pdf](https://github.com/tommiramone/TakeNote/blob/master/Documentacio%CC%81n%20detallada%20del%20proyecto%206e24871191634b05a05fbeccc353713a.pdf)https://github.com/tommiramone/TakeNote/blob/master/Documentacio%CC%81n%20detallada%20del%20proyecto%206e24871191634b05a05fbeccc353713a.pdf
+·[https://github.com/tommiramone/TakeNote/blob/master/Documentacio%CC%81n%20detallada%20del%20proyecto%206e24871191634b05a05fbeccc353713a.pdf](https://github.com/tommiramone/TakeNote/blob/master/Documentacio%CC%81n%20detallada%20del%20proyecto%206e24871191634b05a05fbeccc353713a.pdf) Documentacion detallada del progreso
 ·[
-](https://github.com/tommiramone/TakeNote/blob/master/IEEE830.pdf)https://github.com/tommiramone/TakeNote/blob/master/IEEE830.pdf
+](https://github.com/tommiramone/TakeNote/blob/master/IEEE830.pdf) IEEE830
