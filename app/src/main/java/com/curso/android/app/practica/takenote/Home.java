@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,37 +27,30 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
     private NotaAdapter mNotaAdapter;
     private DatabaseHelper dbHelper;
 
-    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            dirigirALogin();
+        }
+
         boolean isDarkTheme = loadThemeState(this);
         temaUtils.applyThemeToActivity(this, isDarkTheme);
 
         dbHelper = DatabaseHelper.getInstance(this);
-//        dbHelper.eliminarYRecrearBaseDeDatos();
 
         String userId = obtenerUsuarioActual();
         List<DatabaseHelper.Nota> notas = dbHelper.obtenerNotas("notas", userId);
 
-        Log.d("Home", "Usuario actual: " + userId);
-
-        List<DatabaseHelper.Nota> notas2 = dbHelper.obtenerNotas("notas", userId);
-        for (DatabaseHelper.Nota nota : notas2) {
-            Log.d("Home", "ID de la nota: " + nota.getId() + ", Título: " + nota.getTitulo() + ", Cuerpo: " + nota.getCuerpo());
-        }
-
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        Log.d("Home", "RecyclerView initialized");
-
 
         mNotaAdapter = new NotaAdapter(notas, this, false, userId);
-        Log.d("Home", "Adapter created");
 
-        if(isDarkTheme == true){
+        if(isDarkTheme){
             mNotaAdapter.setTextColor(Color.WHITE);
             mNotaAdapter.setImageColor(Color.WHITE);
         } else {
@@ -65,65 +58,85 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
             mNotaAdapter.setImageColor(Color.BLACK);
         }
 
-
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mNotaAdapter.setNotas(notas);
-        Log.d("Home", "Notas set to adapter");
         mNotaAdapter.setOnItemClickListener(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+
+
+        SearchView searchView = findViewById(R.id.searchView);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    actualizarListaDeNotas();
+                } else {
+                    mNotaAdapter.filter(newText);
+                }
+                return true;
+            }
+        });
+
+        //Importacion y funcionalidad de imageView de Toolbar.
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
+        ImageView iconoTrash = findViewById(R.id.iconoTrash);
         ImageView logOut = findViewById(R.id.iconoCerrarSesion);
 
-        ImageView iconoConfig = findViewById(R.id.iconoConfig);
-        iconoConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Config.class);
-                startActivity(intent);
-            }
+        iconoConfig.setOnClickListener(v -> {
+            Intent intent = new Intent(Home.this, Config.class);
+            startActivity(intent);
         });
 
-        ImageView iconoTrash = findViewById(R.id.iconoTrash);
-        iconoTrash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Papelera.class);
-                startActivity(intent);
-            }
+        iconoTrash.setOnClickListener(v -> {
+            Intent intent = new Intent(Home.this, Papelera.class);
+            startActivity(intent);
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Home.this, Nueva.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(Home.this, Nueva.class);
+            startActivity(intent);
         });
 
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cerrarSesion();
-            }
-        });
+        logOut.setOnClickListener(v -> cerrarSesion());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Actualizar la lista de notas u otros datos necesarios aquí
         actualizarListaDeNotas();
 
         boolean isDarkTheme = loadThemeState(this);
         temaUtils.applyThemeToActivity(this, isDarkTheme);
+
+        if(isDarkTheme){
+            mNotaAdapter.setTextColor(Color.WHITE);
+            mNotaAdapter.setImageColor(Color.WHITE);
+        } else {
+            mNotaAdapter.setTextColor(Color.BLACK);
+            mNotaAdapter.setImageColor(Color.BLACK);
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        actualizarListaDeNotas();
     }
 
     @Override
     public void onItemClick(String userId, int position) {
     }
 
+    //Funcionalidad de editar nota.
     @Override
     public void onEditarClick(String userId, int position) {
         DatabaseHelper.Nota nota = mNotaAdapter.getNota(position);
@@ -137,23 +150,15 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         }
     }
 
+    //Funcionalidad de eliminar nota.
     @Override
     public void onEliminarClick(String userId, int position) {
         Log.d("Home", "Eliminar click: Position=" + position);
         mNotaAdapter.enviarNotaAPapelera(obtenerUsuarioActual(),position);
-        mNotaAdapter.notifyDataSetChanged();
+        mNotaAdapter.notifyItemRemoved(position);
     }
 
-    @Override
-    public void onEnviarAPapeleraClick(String userId, int position) {
-        mNotaAdapter.enviarNotaAPapelera(userId, position);
-    }
-
-    @Override
-    public void onRestaurarClick(String userId, int position) {
-
-    }
-
+    //Metodo para obtener el usuario que esta logueado.
     public String obtenerUsuarioActual() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -163,6 +168,7 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         }
     }
 
+    //Metodo para cerrar sesion.
     private void cerrarSesion() {
         FirebaseAuth.getInstance().signOut();
 
@@ -172,19 +178,20 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         finish();
     }
 
+    //Metodo para actualizar la lista de notas actual.
     private void actualizarListaDeNotas() {
         String userId = obtenerUsuarioActual();
         List<DatabaseHelper.Nota> notas = dbHelper.obtenerNotas("notas", userId);
 
-        // Actualizar el adaptador con la nueva lista de notas
         mNotaAdapter.setNotas(notas);
         mNotaAdapter.notifyDataSetChanged();
     }
 
-
-
-
-
-
-
+    //Funcion para redirigir al login.
+    private void dirigirALogin() {
+        Intent intent = new Intent(Home.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish(); // Finalizar la actividad actual
+    }
 }

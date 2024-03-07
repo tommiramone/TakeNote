@@ -5,9 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.util.Log;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,16 +15,16 @@ import com.curso.android.app.practica.takenote.adapters.NotaAdapter;
 
 public class temaUtils {
 
-    public static void applyTheme(Activity activity) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("config_theme", MODE_PRIVATE);
-        String theme = sharedPreferences.getString("theme", "DEFAULT");
-
-        if (theme.equals("DARK")) {
-            applyDarkTheme(activity);
-        } else {
-            applyLightTheme(activity);
-        }
-    }
+//    public static void applyTheme(Activity activity) {
+//        SharedPreferences sharedPreferences = activity.getSharedPreferences("config_theme", MODE_PRIVATE);
+//        String theme = sharedPreferences.getString("theme", "DEFAULT");
+//
+//        if (theme.equals("DARK")) {
+//            applyDarkTheme(activity);
+//        } else {
+//            applyLightTheme(activity);
+//        }
+//    }
 
     public static void applyThemeToActivity(Activity activity, boolean isDarkTheme) {
         if (isDarkTheme) {
@@ -38,20 +36,27 @@ public class temaUtils {
 
     public static void applyDarkTheme(Activity activity) {
         RecyclerView recyclerView = activity.findViewById(R.id.recyclerView);
-        ImageView iconoConfig = activity.findViewById(R.id.iconoConfig);
-        ImageView iconoCerrar = activity.findViewById(R.id.iconoCerrarSesion);
-        ImageView iconoTrash = activity.findViewById(R.id.iconoTrash);
 
         TextView textoOscuro = activity.findViewById(R.id.textoModoOscuro);
-        TextView home = activity.findViewById(R.id.textViewHome);
         TextView gestion =  activity.findViewById(R.id.textGestionCuenta);
 
         EditText userName = activity.findViewById(R.id.editTextUsername);
         EditText password = activity.findViewById(R.id.editTextPassword);
 
+        TextView passwordForgot = activity.findViewById(R.id.textViewPasswordForgot);
+        TextView register = activity.findViewById(R.id.textViewRegister);
+
         EditText editTitulo = activity.findViewById(R.id.editTituloNota);
         EditText editCuerpo = activity.findViewById(R.id.editCuerpoNota);
 
+        TextView textoEmail = activity.findViewById(R.id.textViewEmail);
+        EditText editTextNewEmail = activity.findViewById(R.id.editTextNewEmail);
+        TextView contrasena = activity.findViewById(R.id.textViewContrasena);
+        EditText editTextcontrasenaActual = activity.findViewById(R.id.editTextCurrentPassword);
+        EditText editTextcontrasenaNueva = activity.findViewById(R.id.editTextNewPassword);
+
+        TextView email = activity.findViewById(R.id.textViewCambiarEmail);
+        TextView contra = activity.findViewById(R.id.textViewCambiarContrasena);
 
         activity.findViewById(R.id.mainCoordinatorLayout).setBackgroundColor(Color.parseColor("#212121"));
 
@@ -66,22 +71,24 @@ public class temaUtils {
             }
         }
 
-        if (iconoConfig != null && iconoCerrar != null && iconoTrash != null) {
-            iconoConfig.setColorFilter(Color.WHITE);
-            iconoCerrar.setColorFilter(Color.WHITE);
-            iconoTrash.setColorFilter(Color.WHITE);
-        }
-
-        if(textoOscuro != null && home != null && gestion!=null ){
+        if(textoOscuro != null && gestion!=null ){
             textoOscuro.setTextColor(Color.WHITE);
-            home.setTextColor(Color.WHITE);
             gestion.setTextColor(Color.WHITE);
         }
-
 
         if (userName != null && password != null) {
             userName.setTextColor(Color.WHITE);
             password.setTextColor(Color.WHITE);
+            userName.setBackgroundColor(Color.parseColor("#212121"));
+            password.setBackgroundColor(Color.parseColor("#212121"));
+            userName.setHintTextColor(Color.WHITE);
+            password.setHintTextColor(Color.WHITE);
+
+        }
+
+        if(passwordForgot != null && register != null){
+            passwordForgot.setTextColor(Color.WHITE);
+            register.setTextColor(Color.WHITE);
         }
 
         if (editCuerpo != null && editTitulo != null) {
@@ -93,16 +100,31 @@ public class temaUtils {
             editTitulo.setHintTextColor(Color.WHITE);
         }
 
+        if (textoEmail != null && editTextNewEmail != null){
+            textoEmail.setTextColor(Color.WHITE);
+            editTextNewEmail.setTextColor(Color.WHITE);
+            editTextNewEmail.setBackgroundColor(Color.parseColor("#212121"));
+        }
+
+        if (contrasena != null && editTextcontrasenaNueva != null && editTextcontrasenaActual != null){
+            contrasena.setTextColor(Color.WHITE);
+            editTextcontrasenaNueva.setTextColor(Color.WHITE);
+            editTextcontrasenaActual.setTextColor(Color.WHITE);
+            editTextcontrasenaNueva.setBackgroundColor(Color.parseColor("#212121"));
+            editTextcontrasenaActual.setBackgroundColor(Color.parseColor("#212121"));
+        }
+
+        if (email!= null && contra != null){
+            email.setTextColor(Color.WHITE);
+            contra.setTextColor(Color.WHITE);
+        }
+
     }
 
     public static void applyLightTheme(Activity activity) {
         RecyclerView recyclerView = activity.findViewById(R.id.recyclerView);
-        ImageView iconoConfig = activity.findViewById(R.id.iconoConfig);
-        ImageView iconoCerrar = activity.findViewById(R.id.iconoCerrarSesion);
-        ImageView iconoTrash = activity.findViewById(R.id.iconoTrash);
 
         TextView textoOscuro = activity.findViewById(R.id.textoModoOscuro);
-        TextView home = activity.findViewById(R.id.textViewHome);
         TextView gestion =  activity.findViewById(R.id.textGestionCuenta);
 
         EditText userName = activity.findViewById(R.id.editTextUsername);
@@ -116,6 +138,23 @@ public class temaUtils {
         TextView detalleTitulo = activity.findViewById(R.id.tituloNota);
         TextView detalleCuerpo = activity.findViewById(R.id.cuerpoNota);
 
+        TextView passwordForgot = activity.findViewById(R.id.textViewPasswordForgot);
+        TextView register = activity.findViewById(R.id.textViewRegister);
+
+        TextView textoEmail = activity.findViewById(R.id.textViewEmail);
+        EditText editTextNewEmail = activity.findViewById(R.id.editTextNewEmail);
+        TextView contrasena = activity.findViewById(R.id.textViewContrasena);
+        EditText editTextcontrasenaActual = activity.findViewById(R.id.editTextCurrentPassword);
+        EditText editTextcontrasenaNueva = activity.findViewById(R.id.editTextNewPassword);
+
+        TextView contrasenaRegi = activity.findViewById(R.id.editTextPasswordRegister);
+
+        TextView emailCambiar = activity.findViewById(R.id.textViewCambiarEmail);
+        TextView contra = activity.findViewById(R.id.textViewCambiarContrasena);
+
+
+
+
         activity.findViewById(R.id.mainCoordinatorLayout).setBackgroundColor(Color.WHITE);
 
         if (  activity.findViewById(R.id.mainLinearLayout) != null ){
@@ -126,28 +165,13 @@ public class temaUtils {
             NotaAdapter adapter = (NotaAdapter) recyclerView.getAdapter();
             if (adapter != null) {
                 adapter.setTextColor(Color.BLACK);
-                Log.d("TemaUtils", "Color del texto establecido correctamente en el adaptador de notas.");
-            } else {
-                Log.e("TemaUtils", "El adaptador de notas es nulo.");
             }
-        } else {
-            Log.e("TemaUtils", "El RecyclerView es nulo.");
         }
 
-
-        if (iconoConfig != null && iconoCerrar != null && iconoTrash != null) {
-            iconoConfig.setColorFilter(Color.BLACK);
-            iconoCerrar.setColorFilter(Color.BLACK);
-            iconoTrash.setColorFilter(Color.BLACK);
-        }
-
-
-        if(textoOscuro != null && home != null && gestion!=null ){
+        if(textoOscuro != null && gestion!=null ){
             textoOscuro.setTextColor(Color.BLACK);
-            home.setTextColor(Color.BLACK);
             gestion.setTextColor(Color.BLACK);
         }
-
 
         if (userName != null && password != null) {
             userName.setTextColor(Color.BLACK);
@@ -157,6 +181,17 @@ public class temaUtils {
             userName.setHintTextColor(Color.BLACK);
             password.setHintTextColor(Color.BLACK);
 
+        }
+
+        if(passwordForgot != null && register != null){
+            passwordForgot.setTextColor(Color.BLACK);
+            register.setTextColor(Color.BLACK);
+        }
+
+        if(contrasenaRegi != null){
+            contrasenaRegi.setTextColor(Color.BLACK);
+            contrasenaRegi.setHintTextColor(Color.BLACK);
+            contrasenaRegi.setBackgroundColor(Color.parseColor("#ededed"));
         }
 
         if (userName != null && password != null) {
@@ -190,7 +225,25 @@ public class temaUtils {
             detalleCuerpo.setTextColor(Color.BLACK);
         }
 
+        if (textoEmail != null && editTextNewEmail != null){
+            textoEmail.setTextColor(Color.BLACK);
+            editTextNewEmail.setHintTextColor(Color.BLACK);
+            editTextNewEmail.setBackgroundColor(Color.parseColor("#ededed"));
+        }
 
+        if (contrasena != null && editTextcontrasenaNueva != null && editTextcontrasenaActual != null){
+            contrasena.setTextColor(Color.BLACK);
+            editTextcontrasenaNueva.setHintTextColor(Color.BLACK);
+            editTextcontrasenaActual.setHintTextColor(Color.BLACK);
+            editTextcontrasenaNueva.setBackgroundColor(Color.parseColor("#ededed"));
+            editTextcontrasenaActual.setBackgroundColor(Color.parseColor("#ededed"));
+
+        }
+
+        if (emailCambiar!= null && contra != null){
+            emailCambiar.setTextColor(Color.BLACK);
+            contra.setTextColor(Color.BLACK);
+        }
     }
 
     public static boolean loadThemeState(Activity activity) {

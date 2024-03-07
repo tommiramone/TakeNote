@@ -1,22 +1,21 @@
 package com.curso.android.app.practica.takenote;
 
 import static android.content.ContentValues.TAG;
+import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.curso.android.app.practica.takenote.utils.temaUtils;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,20 +31,53 @@ public class Email extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cambiar_email);
 
+        boolean isDarkTheme = loadThemeState(this);
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
+
         mAuth = FirebaseAuth.getInstance();
+
+        //Obtener el usuario actual
         user = mAuth.getCurrentUser();
 
         Button buttonChangeEmail = findViewById(R.id.buttonChangeEmail);
-        buttonChangeEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText editEmail = findViewById(R.id.editTextNewEmail);
-                String email = editEmail.getText().toString();
-                updateEmail(email);
-            }
+
+        //Oir el click en el boton para cambiar email.
+        buttonChangeEmail.setOnClickListener(v -> {
+            EditText editEmail = findViewById(R.id.editTextNewEmail);
+            String email = editEmail.getText().toString();
+            updateEmail(email);
         });
+
+        //Importacion y funcionalidad de imageView de Toolbar.
+        ImageView iconoHome = findViewById(R.id.iconoHome);
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+
+        iconoHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+        });
+
+        iconoConfig.setOnClickListener(v -> {
+            Intent intent = new Intent(Email.this, Config.class);
+            startActivity(intent);
+        });
+
+        logOut.setOnClickListener(v -> cerrarSesion());
+
     }
 
+    //Funcionalidad de cerrar sesion
+    private void cerrarSesion() {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intent = new Intent(Email.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    //Metodo para actualizar el email.
     private void updateEmail(String newEmail) {
         if (user != null) {
             Log.d(TAG, "Iniciando proceso de actualización de email");
@@ -57,55 +89,52 @@ public class Email extends AppCompatActivity {
             // Configurar el cuadro de diálogo
             builder.setView(dialogView)
                     .setTitle("Ingrese su contraseña")
-                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String password = editTextPassword.getText().toString();
+                    .setPositiveButton("Aceptar", (dialog, which) -> {
+                        String password = editTextPassword.getText().toString();
 
+                        if (user.getEmail() != null) {
                             AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
                             user.reauthenticate(credential)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "El usuario se reautenticó con éxito");
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "El usuario se reautenticó con éxito");
 
-                                                // El usuario se reautenticó con éxito, proceder con la actualización del correo electrónico
-                                                user.verifyBeforeUpdateEmail(newEmail)
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    Log.d(TAG, "Email actualizado exitosamente");
+                                            // El usuario se reautenticó con éxito, proceder con la actualización del correo electrónico
+                                            user.verifyBeforeUpdateEmail(newEmail)
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            Log.d(TAG, "Email actualizado exitosamente");
 
-                                                                    // Enviar una notificación de éxito
-                                                                    sendEmailChangeNotification(newEmail);
+                                                            // Enviar una notificación de éxito
+                                                            sendEmailChangeNotification(newEmail);
 
-                                                                    // Cerrar sesión
-                                                                    mAuth.signOut();
+                                                            // Cerrar sesión
+                                                            mAuth.signOut();
 
-                                                                    // Iniciar la actividad de inicio de sesión
-                                                                    startActivity(new Intent(Email.this, Login.class));
-                                                                    finish(); // Finaliza esta actividad para evitar que el usuario regrese a ella con el botón "Atrás"
-                                                                } else {
-                                                                    Exception e = task.getException();
-                                                                    Log.d(TAG, "Error al actualizar el email: " + e.getMessage());
-                                                                }
+                                                            // Iniciar la actividad de inicio de sesión
+                                                            startActivity(new Intent(Email.this, Login.class));
+                                                            finish(); // Finaliza esta actividad para evitar que el usuario regrese a ella con el botón "Atrás"
+                                                        } else {
+                                                            Exception e = task1.getException();
+                                                            if (e != null) {
+                                                                Log.d(TAG, "Error al actualizar el email: " + e.getMessage());
                                                             }
-                                                        });
-                                            } else {
-                                                Log.d(TAG, "Error al reautenticar al usuario: " + task.getException().getMessage());
+                                                        }
+                                                    });
+                                        } else {
+                                            Exception e = task.getException();
+                                            if (e != null) {
+                                                Log.d(TAG, "Error al reautenticar al usuario: " + e.getMessage());
                                             }
                                         }
                                     });
+                        } else {
+                            Log.d(TAG, "El correo electrónico del usuario es nulo");
                         }
                     })
-                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            Log.d(TAG, "Proceso de actualización de email cancelado por el usuario");
-                        }
+                    .setNegativeButton("Cancelar", (dialog, which) -> {
+                        dialog.dismiss();
+                        Log.d(TAG, "Proceso de actualización de email cancelado por el usuario");
                     });
 
             AlertDialog dialog = builder.create();
@@ -114,6 +143,7 @@ public class Email extends AppCompatActivity {
             Log.d(TAG, "El usuario es nulo");
         }
     }
+
 
     private void sendEmailChangeNotification(String newEmail) {
         Toast.makeText(Email.this, "Se ha enviado un correo electrónico de confirmación a " + newEmail, Toast.LENGTH_SHORT).show();

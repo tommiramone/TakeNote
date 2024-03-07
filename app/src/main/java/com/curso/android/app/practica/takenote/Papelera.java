@@ -2,11 +2,13 @@ package com.curso.android.app.practica.takenote;
 
 import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,20 +32,22 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
         boolean isDarkTheme = loadThemeState(this);
         temaUtils.applyThemeToActivity(this, isDarkTheme);
 
+        //instancia de la DatabaseHelper.
         dbHelper = DatabaseHelper.getInstance(this);
-//        dbHelper.eliminarYRecrearBaseDeDatos();
 
+        //Armado de la lista de notas que contiene la tabla Papelera.
         List<DatabaseHelper.Nota> notasEnPapelera = obtenerNotasEnPapelera();
-        Log.d("PapeleraActivity", "Notas en Papelera: " + notasEnPapelera.size());
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPapelera);
 
+        //Instancia del NotaAdapter.
         mNotaAdapter = new NotaAdapter(notasEnPapelera, this, true, userId);
 
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if(isDarkTheme == true){
+        //Configuracion del tema oscuro.
+        if(isDarkTheme){
             mNotaAdapter.setTextColor(Color.WHITE);
             mNotaAdapter.setImageColor(Color.WHITE);
         } else {
@@ -51,12 +55,59 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
             mNotaAdapter.setImageColor(Color.BLACK);
         }
 
+        //Importacion y funcionalidad del cuadro de busqueda.
+        SearchView searchViewPapelera = findViewById(R.id.searchViewPapelera);
+        searchViewPapelera.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    actualizarListaDeNotasPapelera();
+                } else {
+                    mNotaAdapter.filterPapelera(newText);
+                }
+                return true;
+            }
+        });
+
+        //Importación y funcionalidad de imageView de toolbar.
+        ImageView iconoHome = findViewById(R.id.iconoHome);
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+
+        iconoHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+        });
+
+        iconoConfig.setOnClickListener(v -> {
+            Intent intent = new Intent(Papelera.this, Config.class);
+            startActivity(intent);
+        });
+
+        logOut.setOnClickListener(v -> cerrarSesion());
+
         mNotaAdapter.setNotas(notasEnPapelera);
         mNotaAdapter.setOnItemClickListener(this);
     }
 
     String userId = obtenerUsuarioActual();
 
+    //Funcionalidad de cerrar sesión
+    private void cerrarSesion() {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intent = new Intent(Papelera.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    //Metodo para obtener el usuario logueado
     private String obtenerUsuarioActual() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -66,39 +117,28 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
         }
     }
 
+    private void actualizarListaDeNotasPapelera() {
+        List<DatabaseHelper.Nota> notasPapelera = obtenerNotasEnPapelera();
+        mNotaAdapter.setNotas(notasPapelera);
+        mNotaAdapter.notifyDataSetChanged();
+    }
+
     private List<DatabaseHelper.Nota> obtenerNotasEnPapelera() {
         return dbHelper.obtenerNotas("papelera", obtenerUsuarioActual());
     }
 
-    @Override
-    public void onItemClick(String userId, int position) {
-        Log.d("PapeleraActivity", "onItemClick called for position: " + position);
+    //Metodo para actualizar la lista de notas en caso de volver para atras en las pantallas evitando problemas u errores de carga.
+    public void onBackPressed() {
+        super.onBackPressed();
+        actualizarListaDeNotasPapelera();
     }
 
-    @Override
-    public void onEditarClick(String userId, int position ) {
-        // Implementa el comportamiento cuando se hace clic en editar en un elemento en la Papelera
-        // Por ejemplo, podrías abrir una vista de edición para el elemento seleccionado
-    }
-
-    @Override
-    public void onEliminarClick(String userId, int position) {
-        // Implementa el comportamiento cuando se hace clic en eliminar en un elemento en la Papelera
-        // Por ejemplo, podrías eliminar el elemento de la Papelera y actualizar la lista
-    }
-
-    @Override
-    public void onEnviarAPapeleraClick(String userId, int position) {
-        // Implementa el comportamiento cuando se hace clic en enviar a papelera en un elemento en la Papelera
-        // Por ejemplo, podrías mover el elemento de nuevo a la lista principal de notas
-    }
-
+    //Funcionalidad al restaurar.
     public void onRestaurarClick(String userId, int position) {
         if (mNotaAdapter != null) {
             mNotaAdapter.restaurarNotaDesdePapelera(obtenerUsuarioActual(), position);
-            Log.d("PapeleraActivity", "Nota restauradasa desde la papelera en posición: " + position);
-        } else {
-            Log.d("PapeleraActivity", "Error en metodo");
         }
     }
+
+
 }

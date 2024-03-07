@@ -1,7 +1,8 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:id="@+id/mainCoordinatorLayout">
 
@@ -22,8 +23,53 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Take Note"
-                android:textSize="60sp" />
+                android:textColor="@color/white"
+                android:text="@string/app_name"
+                android:textSize="50sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/blue_dark"
+            >
+
+            <ImageView
+                android:id="@+id/iconoConfig"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="60dp"
+                android:contentDescription="@string/click_para_ir_a_ajustes"
+                android:src="@drawable/config"
+                app:tint="@android:color/white"
+                tools:ignore="RedundantDescriptionCheck" />
+
+            <ImageView
+                android:id="@+id/iconoHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="30dp"
+                android:contentDescription="@string/click_para_ir_al_inicio"
+                android:src="@drawable/home"
+                app:tint="@android:color/white"
+                tools:ignore="RedundantDescriptionCheck" />
+
+            <ImageView
+                android:id="@+id/iconoCerrarSesion"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="2dp"
+                android:contentDescription="@string/click_para_cerrar_sesion"
+                android:src="@drawable/logout_dark"
+                app:tint="@android:color/white"
+                tools:ignore="RedundantDescriptionCheck" />
+
         </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -33,6 +79,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
+        android:gravity="center_vertical"
         android:id="@+id/mainLinearLayout"
         android:padding="100dp"
         >
@@ -41,27 +88,37 @@
             android:id="@+id/textViewCambiarEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cambiar Email"
-            android:textColor="@color/white"
-            android:onClick="cambiarEmail"/>
+            android:layout_gravity="center_horizontal"
+            android:minHeight="48sp"
+            android:onClick="cambiarEmail"
+            android:text="@string/cambiar_email"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            tools:ignore="TextSizeCheck" />
 
         <TextView
             android:id="@+id/textViewCambiarContrasena"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cambiar Contraseña"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            android:onClick="cambiarContrasena" />
+            android:minHeight="48sp"
+            android:onClick="cambiarContrasena"
+            android:text="@string/cambiar_contrase_a"
+            android:textSize="22sp"
+            tools:ignore="TextSizeCheck" />
 
         <Button
             android:id="@+id/textViewBorrarCuenta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Borrar Cuenta"
+            android:text="@string/borrar_cuenta"
+            android:textAlignment="center"
             android:layout_marginTop="20dp"
             android:textColor="@color/white"
-            android:onClick="borrarCuenta" />
+            android:onClick="borrarCuenta"
+            android:layout_gravity="center_horizontal"
+            />
 
 
     </LinearLayout>
