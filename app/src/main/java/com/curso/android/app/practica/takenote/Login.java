@@ -70,4 +70,9 @@ public class Login extends AppCompatActivity {
             finish();
         }
     }
+
+    public void goToRegisterActivity(View view) {
+        Intent intent = new Intent(this, Registro.class);
+        startActivity(intent);
+    }
 }

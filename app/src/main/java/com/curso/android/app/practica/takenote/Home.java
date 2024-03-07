@@ -37,7 +37,6 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         boolean isDarkTheme = loadThemeState(this);
         temaUtils.applyThemeToActivity(this, isDarkTheme);
 
-
         dbHelper = DatabaseHelper.getInstance(this);
 //        dbHelper.eliminarYRecrearBaseDeDatos();
 
@@ -112,6 +111,16 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Actualizar la lista de notas u otros datos necesarios aquí
+        actualizarListaDeNotas();
+
+        boolean isDarkTheme = loadThemeState(this);
+        temaUtils.applyThemeToActivity(this, isDarkTheme);
+    }
+
+    @Override
     public void onItemClick(String userId, int position) {
     }
 
@@ -161,6 +170,15 @@ public class Home extends AppCompatActivity implements NotaAdapter.OnItemClickLi
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    private void actualizarListaDeNotas() {
+        String userId = obtenerUsuarioActual();
+        List<DatabaseHelper.Nota> notas = dbHelper.obtenerNotas("notas", userId);
+
+        // Actualizar el adaptador con la nueva lista de notas
+        mNotaAdapter.setNotas(notas);
+        mNotaAdapter.notifyDataSetChanged();
     }
 
 

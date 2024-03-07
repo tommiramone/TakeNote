@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/AppTheme"
+    android:id="@+id/mainCoordinatorLayout"
     android:fitsSystemWindows="true"
     tools:context=".Home">
 
@@ -17,25 +17,29 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="122dp"
-            android:background="@color/blue">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/blue"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
                 android:id="@+id/toolbarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Take Note"
-                android:textSize="60sp"
+                android:textSize="24sp"
                 android:textColor="@android:color/white"
                 android:layout_gravity="center" />
+
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/mainLinearLayout"
         android:padding="16dp">
 
         <TextView
@@ -45,8 +49,7 @@
             android:textAlignment="center"
             android:padding="16dp"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:text="Título de la Nota" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/cuerpoNota"
@@ -55,8 +58,7 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:layout_margin="16dp"
-            android:padding="16dp"
-            android:text="Cuerpo" />
+            android:padding="16dp" />
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package com.curso.android.app.practica.takenote.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.curso.android.app.practica.takenote.Detalle;
 import com.curso.android.app.practica.takenote.R;
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -89,6 +91,31 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         } else {
             holder.bind(nota, Color.BLACK); //
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    int position = holder.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        mListener.onItemClick(userId, position);
+
+                        // Obtener la nota seleccionada
+                        DatabaseHelper.Nota notaSeleccionada = listaDeNotas.get(position);
+
+                        // Crear un Intent para iniciar la actividad Detalle
+                        Intent intent = new Intent(context, Detalle.class);
+
+                        // Pasar el título y el cuerpo de la nota como extras en el Intent
+                        intent.putExtra("titulo", notaSeleccionada.getTitulo());
+                        intent.putExtra("cuerpo", notaSeleccionada.getCuerpo());
+
+                        // Iniciar la actividad Detalle
+                        context.startActivity(intent);
+                    }
+                }
+            }
+        });
 
 
     }
@@ -170,7 +197,13 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
 
         public void bind(DatabaseHelper.Nota nota, int textColor) {
             tituloTextView.setText(nota.getTitulo());
-            cuerpoTextView.setText(nota.getCuerpo());
+            String cuerpo = nota.getCuerpo();
+
+            if (cuerpo.length() > 45){
+                cuerpo = cuerpo.substring(0,45) + "...";
+            }
+
+            cuerpoTextView.setText(cuerpo);
 
             tituloTextView.setTextColor(textColor);
             cuerpoTextView.setTextColor(textColor);

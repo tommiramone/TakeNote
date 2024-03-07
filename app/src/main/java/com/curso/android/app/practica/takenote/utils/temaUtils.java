@@ -113,6 +113,8 @@ public class temaUtils {
         EditText editTitulo = activity.findViewById(R.id.editTituloNota);
         EditText editCuerpo = activity.findViewById(R.id.editCuerpoNota);
 
+        TextView detalleTitulo = activity.findViewById(R.id.tituloNota);
+        TextView detalleCuerpo = activity.findViewById(R.id.cuerpoNota);
 
         activity.findViewById(R.id.mainCoordinatorLayout).setBackgroundColor(Color.WHITE);
 
@@ -181,6 +183,11 @@ public class temaUtils {
             email.setHintTextColor(Color.BLACK);
             email.setTextColor(Color.BLACK);
             email.setBackgroundColor(Color.parseColor("#ededed"));
+        }
+
+        if(detalleCuerpo != null && detalleTitulo != null) {
+            detalleTitulo.setTextColor(Color.BLACK);
+            detalleCuerpo.setTextColor(Color.BLACK);
         }
 
 

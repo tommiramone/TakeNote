@@ -41,6 +41,15 @@
         <activity android:name=".Nueva"
             android:exported="true" />
 
+        <activity android:name=".Gestion"
+            android:exported="true" />
+
+        <activity android:name=".Email"
+            android:exported="true" />
+
+        <activity android:name=".Contra"
+            android:exported="true" />
+
     </application>
 
 </manifest>
