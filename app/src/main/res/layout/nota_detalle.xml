@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
-                android:text="Take Note"
+                android:text="@string/app_name"
                 android:textSize="50sp" />
         </RelativeLayout>
 
@@ -42,39 +42,36 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="60dp"
-                app:tint="@android:color/white"
+                android:contentDescription="@string/click_para_ir_a_ajustes"
                 android:src="@drawable/config"
-                android:contentDescription= "Click para ir a ajustes"
-                />
+                app:tint="@android:color/white"
+                tools:ignore="RedundantDescriptionCheck" />
 
             <ImageView
                 android:id="@+id/iconoHome"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="30dp"
+                android:contentDescription="@string/click_para_ir_al_inicio"
                 android:src="@drawable/home"
                 app:tint="@android:color/white"
-                android:contentDescription= "Click para ir al inicio"
-                />
+                tools:ignore="RedundantDescriptionCheck" />
 
             <ImageView
                 android:id="@+id/iconoCerrarSesion"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="2dp"
+                android:contentDescription="@string/click_para_cerrar_sesion"
                 android:src="@drawable/logout_dark"
                 app:tint="@android:color/white"
-                android:contentDescription= "Click para cerrar sesion"
-                />
+                tools:ignore="RedundantDescriptionCheck" />
 
         </RelativeLayout>
 
@@ -106,12 +103,6 @@
             android:textSize="18sp"
             android:layout_margin="16dp"
             android:padding="16dp" />
-
-        <Button
-            android:id="@+id/botonRestaurar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Restaurar"/>
 
 
     </LinearLayout>

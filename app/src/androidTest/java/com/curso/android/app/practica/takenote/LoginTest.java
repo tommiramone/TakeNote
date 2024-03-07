@@ -36,7 +36,12 @@ public class LoginTest {
                         assertNotNull(user);
                     } else {
                         // Si el inicio de sesión falla, mostramos el mensaje de error
-                        fail("Error al iniciar sesión: " + task.getException().getMessage());
+                        if (task.getException() != null) {
+                            fail("Fallo al iniciar sesion: " + task.getException().getMessage());
+                        } else {
+                            fail("Fallo al iniciar sesion:: Excepción desconocida.");
+                        }
+
                     }
                 });
     }

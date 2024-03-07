@@ -4,18 +4,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.curso.android.app.practica.takenote.utils.temaUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Config extends AppCompatActivity {
 
-    private Switch change_theme;
+    private SwitchCompat change_theme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,45 +23,32 @@ public class Config extends AppCompatActivity {
 
         change_theme = findViewById(R.id.switchDarkMode);
 
+        //Importacion y funcionalidad de ImageView de toolbar.
         ImageView iconoHome = findViewById(R.id.iconoHome);
-        iconoHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Home.class);
-                startActivity(intent);
-            }
-        });
-
         ImageView iconoConfig = findViewById(R.id.iconoConfig);
-        iconoConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Config.this, Config.class);
-                startActivity(intent);
-            }
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+
+        iconoHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
         });
 
-        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cerrarSesion();
-            }
+        iconoConfig.setOnClickListener(v -> {
+            Intent intent = new Intent(Config.this, Config.class);
+            startActivity(intent);
         });
+
+        logOut.setOnClickListener(v -> cerrarSesion());
 
 
         // Configura el listener del Switch para cambiar el tema dinámicamente
-        change_theme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Guarda el estado del tema en las preferencias compartidas
-                saveThemeState(isChecked);
+        change_theme.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Guarda el estado del tema en las preferencias compartidas
+            saveThemeState(isChecked);
 
-                // Aplica el tema basado en el estado del Switch
-                applyThemeBasedOnSwitch(isChecked);
-            }
+            // Aplica el tema basado en el estado del Switch
+            applyThemeBasedOnSwitch(isChecked);
         });
-
 
         // Carga y aplica el tema inicialmente
         loadAndApplyTheme();
@@ -70,6 +56,7 @@ public class Config extends AppCompatActivity {
 
     }
 
+    //Metodo para aplicar el tema oscuro o claro segun el switch.
     private void loadAndApplyTheme() {
         // Carga el estado del tema desde las preferencias compartidas
         boolean isDarkTheme = loadThemeState();
@@ -81,6 +68,7 @@ public class Config extends AppCompatActivity {
         change_theme.setChecked(isDarkTheme);
     }
 
+    //Función que se encarga de guardar el estado del tema elegido en SharedPreferences
     private void saveThemeState(boolean isDarkTheme) {
         SharedPreferences sharedPreferences = getSharedPreferences("config_theme", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -88,25 +76,24 @@ public class Config extends AppCompatActivity {
         editor.apply();
     }
 
+    //Función que se carga el estado del tema desde las preferencias compartidas.
     private boolean loadThemeState() {
         SharedPreferences sharedPreferences = getSharedPreferences("config_theme", MODE_PRIVATE);
         return sharedPreferences.getBoolean("is_dark_theme", false);
     }
 
+    //Función que se encarga de aplicar el tema a la actividad basado en el estado del Switch.
     private void applyThemeBasedOnSwitch(boolean isDarkTheme) {
         temaUtils.applyThemeToActivity(this, isDarkTheme);
     }
 
-    public void goToHome(View view) {
-        Intent intent = new Intent(this, Home.class);
-        startActivity(intent);
-    }
-
+    //Metodo para enviar al usuario a Gestion de usuario.
     public void goToGestion(View view) {
         Intent intent = new Intent(this, Gestion.class);
         startActivity(intent);
     }
 
+    //Metodo para cerrar sesion utilizando firebaseAuth
     private void cerrarSesion() {
         FirebaseAuth.getInstance().signOut();
 

@@ -27,15 +27,14 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
 
 
     private List<DatabaseHelper.Nota> listaDeNotas; // Lista original de todas las notas
-    private List<DatabaseHelper.Nota> mFilteredNotas; // Lista filtrada de notas para mostrar
-    private List<DatabaseHelper.Nota> listaDeNotasOriginales; // Lista original de todas las notas
-    private DatabaseHelper dbHelper;
-    private Context context;
+    private final List<DatabaseHelper.Nota> mFilteredNotas; // Lista filtrada de notas para mostrar
+    private final List<DatabaseHelper.Nota> listaDeNotasOriginales; // Lista original de todas las notas
+    private final DatabaseHelper dbHelper;
+    private final Context context;
     private OnItemClickListener mListener;
-    private boolean isPapelera;
+    private final boolean isPapelera;
     private Integer textColor;
-
-    private String userId;
+    private final String userId;
     private Integer imageColor;
 
     public NotaAdapter(List<DatabaseHelper.Nota> listaDeNotas, Context context, boolean isPapelera, String userId) {
@@ -53,23 +52,26 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     }
 
 
+    //Setea el color que tomaran las letras
     public void setTextColor(int color) {
         this.textColor = color;
         notifyDataSetChanged();
     }
 
+    //Setea el color que tomaran los imageView
     public void setImageColor(int color){
         this.imageColor = color;
         notifyDataSetChanged();
     }
 
+
     public interface OnItemClickListener {
-        void onItemClick(String userId, int position);
-        void onEditarClick(String userId, int position);
-        void onEliminarClick(String userId, int position);
-        void onEnviarAPapeleraClick(String userId, int position);
-        void onRestaurarClick(String userId, int position);
+        default void onItemClick(String userId, int position) {}
+        default void onEditarClick(String userId, int position) {}
+        default void onEliminarClick(String userId, int position) {}
+        default void onRestaurarClick(String userId, int position) {}
     }
+
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
@@ -95,32 +97,30 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
 
         if (textColor != null) {
-            holder.bind(nota, textColor.intValue());
+            holder.bind(nota, textColor);
         } else {
             holder.bind(nota, Color.BLACK); //
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    int position = holder.getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        mListener.onItemClick(userId, position);
+        //setOnClick que permite abrir la vista en detalle de cada nota
+        holder.itemView.setOnClickListener(v -> {
+            if (mListener != null) {
+                int position1 = holder.getAdapterPosition();
+                if (position1 != RecyclerView.NO_POSITION) {
+                    mListener.onItemClick(userId, position1);
 
-                        // Obtener la nota seleccionada
-                        DatabaseHelper.Nota notaSeleccionada = listaDeNotas.get(position);
+                    // Obtener la nota seleccionada
+                    DatabaseHelper.Nota notaSeleccionada = listaDeNotas.get(position1);
 
-                        // Crear un Intent para iniciar la actividad Detalle
-                        Intent intent = new Intent(context, Detalle.class);
+                    // Crear un Intent para iniciar la actividad Detalle
+                    Intent intent = new Intent(context, Detalle.class);
 
-                        // Pasar el título y el cuerpo de la nota como extras en el Intent
-                        intent.putExtra("titulo", notaSeleccionada.getTitulo());
-                        intent.putExtra("cuerpo", notaSeleccionada.getCuerpo());
+                    // Pasar el título y el cuerpo de la nota como extras en el Intent
+                    intent.putExtra("titulo", notaSeleccionada.getTitulo());
+                    intent.putExtra("cuerpo", notaSeleccionada.getCuerpo());
 
-                        // Iniciar la actividad Detalle
-                        context.startActivity(intent);
-                    }
+                    // Iniciar la actividad Detalle
+                    context.startActivity(intent);
                 }
             }
         });
@@ -133,13 +133,11 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
     }
 
     public class NotaViewHolder extends RecyclerView.ViewHolder {
-        private TextView tituloTextView;
-        private TextView cuerpoTextView;
-        private ImageView editarImageView;
-        private ImageView eliminarImageView;
-        private ImageView restaurarImageView;
-
-        private String userId; // Agregar userId como campo en el adapter
+        private final TextView tituloTextView;
+        private final TextView cuerpoTextView;
+        private final ImageView editarImageView;
+        private final ImageView eliminarImageView;
+        private final ImageView restaurarImageView;
 
         public NotaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,59 +146,53 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
             editarImageView = itemView.findViewById(R.id.iconoEditar);
             eliminarImageView = itemView.findViewById(R.id.iconoEliminar);
             restaurarImageView = itemView.findViewById(R.id.iconoRestaurar);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            mListener.onItemClick(userId, position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (mListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        mListener.onItemClick(userId, position);
                     }
                 }
             });
 
-            editarImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            mListener.onEditarClick(userId, position);
-                        }
-                    }
-                }
-            });
+            //Funcionalidad al hacer click en el imageView de editar
+           if(editarImageView!=null){
+               editarImageView.setOnClickListener(v -> {
+                   if (mListener != null) {
+                       int position = getAdapterPosition();
+                       if (position != RecyclerView.NO_POSITION) {
+                           mListener.onEditarClick(userId, position);
+                       }
+                   }
+               });
+           }
 
-            eliminarImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            //Funcionalidad al hacer click en el imageView de eliminar
+            if(eliminarImageView != null){
+                eliminarImageView.setOnClickListener(v -> {
                     if (mListener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             mListener.onEliminarClick(userId, position);
                         }
                     }
-                }
-            });
+                });
+            }
 
-
+            //Funcionalidad al hacer click en el imageView de restaurar en Papelera, no sin antes corroborar que existe.
             if (restaurarImageView != null) {
-                restaurarImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mListener != null) {
-                            int position = getAdapterPosition();
-                            if (position != RecyclerView.NO_POSITION) {
-                                mListener.onRestaurarClick(userId, position);
-                            }
+                restaurarImageView.setOnClickListener(v -> {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onRestaurarClick(userId, position);
                         }
                     }
                 });
             }
         }
 
+        //Bind es el encargado de asignar valores de una nota especifica a los elementos de la interfaz de usuario dentro del ViewHolder
         public void bind(DatabaseHelper.Nota nota, int textColor) {
             tituloTextView.setText(nota.getTitulo());
             String cuerpo = nota.getCuerpo();
@@ -214,22 +206,28 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
             tituloTextView.setTextColor(textColor);
             cuerpoTextView.setTextColor(textColor);
 
-            if (imageColor != null) {
-                eliminarImageView.setColorFilter(imageColor.intValue());
-                editarImageView.setColorFilter(imageColor.intValue());
+            if (editarImageView != null && eliminarImageView != null) {
+                if (imageColor != null) {
+                    eliminarImageView.setColorFilter(imageColor);
+                    editarImageView.setColorFilter(imageColor);
+                }
             }
 
-            if (restaurarImageView != null && imageColor != null) {
-                restaurarImageView.setColorFilter(imageColor.intValue());
+            if (restaurarImageView != null) { // Verifica si restaurarImageView no es nulo
+                if (imageColor != null) {
+                    restaurarImageView.setColorFilter(imageColor);
+                }
             }
         }
     }
 
+    //Funcion para actualizar las notas que se muestran.
     public void setNotas(List<DatabaseHelper.Nota> notas) {
         this.listaDeNotas = notas;
         notifyDataSetChanged();
     }
 
+    //Funcion para lograr obtener el usuario que esta logueado.
     public String obtenerUsuarioActual() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -239,6 +237,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         }
     }
 
+    //Funcion utilizada para obtener una nota especifica de la lista de notas.
     public DatabaseHelper.Nota getNota(int position) {
         if (listaDeNotas.isEmpty() || position < 0 || position >= listaDeNotas.size()) {
             return null;
@@ -246,6 +245,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         return listaDeNotas.get(position);
     }
 
+    //Funcion para traer una nota de la tabla Nota a la tabla Papelera.
     public void enviarNotaAPapelera(String userId, int position) {
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
         int notaId = nota.getId();
@@ -255,18 +255,17 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         notifyItemRemoved(position);
     }
 
+    //Funcion para traer una nota de la tabla Papelera a la tabla Notas.
     public void restaurarNotaDesdePapelera(String userId, int position) {
         DatabaseHelper.Nota nota = listaDeNotas.get(position);
         int notaId = nota.getId();
         Log.d("NotaAdapter", "Restaurando nota desde la papelera: ID=" + notaId + ", Título=" + nota.getTitulo());
-        dbHelper.restaurarNotaDesdePapelera(obtenerUsuarioActual(), notaId);
+        dbHelper.restaurarNotaDesdePapelera(context, obtenerUsuarioActual(), notaId);
         listaDeNotas.remove(position);
         notifyItemRemoved(position);
     }
 
-
-
-
+    //Funcion de filtrado de las listas de notas.
     public void filter(String searchText) {
         searchText = searchText.toLowerCase(Locale.getDefault());
         mFilteredNotas.clear();
@@ -286,6 +285,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
         notifyDataSetChanged();
     }
 
+    //Funcion de filtrado de notas en la Papelera.
     public void filterPapelera(String searchText) {
         searchText = searchText.toLowerCase(Locale.getDefault());
         mFilteredNotas.clear();

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/mainCoordinatorLayout"
@@ -24,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Take Note"
+                android:text="@string/app_name"
                 android:textColor="@android:color/white"
                 android:textSize="50sp" />
         </RelativeLayout>
@@ -40,53 +41,39 @@
         >
 
         <EditText
-            android:id="@+id/editTextUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="8dp"
-            android:hint="Nombre de Usuario"
-            android:inputType="text" />
-
-        <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextUsername"
             android:layout_marginTop="8dp"
-            android:paddingLeft="8dp"
-            android:hint="Correo Electrónico"
-            android:inputType="textEmailAddress" />
+            android:autofillHints=""
+            android:hint="@string/correo_electr_nico"
+            android:inputType="textEmailAddress"
+            android:minHeight="48sp"
+            android:paddingStart="8dp"
+            android:textColorHint="#8D6E63"
+            tools:ignore="RtlSymmetry" />
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/editTextPasswordRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextEmail"
             android:layout_marginTop="8dp"
-            android:paddingLeft="8dp"
-            android:hint="Contraseña"
-            android:inputType="textPassword" />
+            android:hint="@string/contrase_a"
+            android:inputType="textPassword"
+            android:minHeight="48sp"
+            android:paddingStart="8dp"
+            tools:ignore="RtlSymmetry"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextPassword"
+            android:layout_below="@id/editTextPasswordRegister"
             android:layout_marginTop="16dp"
-            android:text="Registrar"
+            android:text="@string/registrar"
             android:backgroundTint="@color/blue" />
     </RelativeLayout>
-
-<!--    <TextView-->
-<!--        android:id="@+id/title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_below="@id/appBarLayout"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:text="Registro de Usuario"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        android:textSize="30sp" />-->
 
 </RelativeLayout>

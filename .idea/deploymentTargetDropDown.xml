@@ -2,13 +2,16 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="EditarNotaTest">
-        <State />
-      </entry>
       <entry key="Home">
         <State />
       </entry>
-      <entry key="RestaurarNotaTest">
+      <entry key="Login">
+        <State />
+      </entry>
+      <entry key="Papelera">
+        <State />
+      </entry>
+      <entry key="Registro">
         <State />
       </entry>
       <entry key="app">

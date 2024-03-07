@@ -1,12 +1,10 @@
 package com.curso.android.app.practica.takenote;
 
+import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Test;
@@ -23,16 +21,13 @@ public class RegisterTest {
 
         // Realizar el registro de usuario
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // El registro de usuario fue exitoso
-                            assertTrue(task.isSuccessful());
-                        } else {
-                            // El registro de usuario falló
-                            assertTrue(task.getException() == null);
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // El registro de usuario fue exitoso
+                        assertTrue(task.isSuccessful());
+                    } else {
+                        // El registro de usuario falló
+                        assertNull(task.getException());
                     }
                 });
 

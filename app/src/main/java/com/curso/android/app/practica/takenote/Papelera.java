@@ -5,8 +5,6 @@ import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeS
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,20 +32,22 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
         boolean isDarkTheme = loadThemeState(this);
         temaUtils.applyThemeToActivity(this, isDarkTheme);
 
+        //instancia de la DatabaseHelper.
         dbHelper = DatabaseHelper.getInstance(this);
-//        dbHelper.eliminarYRecrearBaseDeDatos();
 
+        //Armado de la lista de notas que contiene la tabla Papelera.
         List<DatabaseHelper.Nota> notasEnPapelera = obtenerNotasEnPapelera();
-        Log.d("PapeleraActivity", "Notas en Papelera: " + notasEnPapelera.size());
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPapelera);
 
+        //Instancia del NotaAdapter.
         mNotaAdapter = new NotaAdapter(notasEnPapelera, this, true, userId);
 
         recyclerView.setAdapter(mNotaAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if(isDarkTheme == true){
+        //Configuracion del tema oscuro.
+        if(isDarkTheme){
             mNotaAdapter.setTextColor(Color.WHITE);
             mNotaAdapter.setImageColor(Color.WHITE);
         } else {
@@ -55,8 +55,8 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
             mNotaAdapter.setImageColor(Color.BLACK);
         }
 
+        //Importacion y funcionalidad del cuadro de busqueda.
         SearchView searchViewPapelera = findViewById(R.id.searchViewPapelera);
-
         searchViewPapelera.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -74,31 +74,22 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
             }
         });
 
+        //Importación y funcionalidad de imageView de toolbar.
         ImageView iconoHome = findViewById(R.id.iconoHome);
-        iconoHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Home.class);
-                startActivity(intent);
-            }
-        });
-
         ImageView iconoConfig = findViewById(R.id.iconoConfig);
-        iconoConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Papelera.this, Config.class);
-                startActivity(intent);
-            }
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+
+        iconoHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
         });
 
-        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cerrarSesion();
-            }
+        iconoConfig.setOnClickListener(v -> {
+            Intent intent = new Intent(Papelera.this, Config.class);
+            startActivity(intent);
         });
+
+        logOut.setOnClickListener(v -> cerrarSesion());
 
         mNotaAdapter.setNotas(notasEnPapelera);
         mNotaAdapter.setOnItemClickListener(this);
@@ -106,6 +97,7 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
 
     String userId = obtenerUsuarioActual();
 
+    //Funcionalidad de cerrar sesión
     private void cerrarSesion() {
         FirebaseAuth.getInstance().signOut();
 
@@ -114,6 +106,8 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
         startActivity(intent);
         finish();
     }
+
+    //Metodo para obtener el usuario logueado
     private String obtenerUsuarioActual() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -124,9 +118,7 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
     }
 
     private void actualizarListaDeNotasPapelera() {
-        String userId = obtenerUsuarioActual();
         List<DatabaseHelper.Nota> notasPapelera = obtenerNotasEnPapelera();
-
         mNotaAdapter.setNotas(notasPapelera);
         mNotaAdapter.notifyDataSetChanged();
     }
@@ -135,38 +127,16 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
         return dbHelper.obtenerNotas("papelera", obtenerUsuarioActual());
     }
 
+    //Metodo para actualizar la lista de notas en caso de volver para atras en las pantallas evitando problemas u errores de carga.
     public void onBackPressed() {
         super.onBackPressed();
         actualizarListaDeNotasPapelera();
     }
 
-    @Override
-    public void onItemClick(String userId, int position) {
-        Log.d("PapeleraActivity", "onItemClick called for position: " + position);
-    }
-
-    @Override
-    public void onEditarClick(String userId, int position ) {
-    }
-
-    @Override
-    public void onEliminarClick(String userId, int position) {
-        // Implementa el comportamiento cuando se hace clic en eliminar en un elemento en la Papelera
-        // Por ejemplo, podrías eliminar el elemento de la Papelera y actualizar la lista
-    }
-
-    @Override
-    public void onEnviarAPapeleraClick(String userId, int position) {
-        // Implementa el comportamiento cuando se hace clic en enviar a papelera en un elemento en la Papelera
-        // Por ejemplo, podrías mover el elemento de nuevo a la lista principal de notas
-    }
-
+    //Funcionalidad al restaurar.
     public void onRestaurarClick(String userId, int position) {
         if (mNotaAdapter != null) {
             mNotaAdapter.restaurarNotaDesdePapelera(obtenerUsuarioActual(), position);
-            Log.d("PapeleraActivity", "Nota restauradasa desde la papelera en posición: " + position);
-        } else {
-            Log.d("PapeleraActivity", "Error en metodo");
         }
     }
 

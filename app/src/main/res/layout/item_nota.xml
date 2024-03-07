@@ -1,5 +1,6 @@
 <!-- item_nota.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +10,8 @@
         android:id="@+id/layoutContenido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="RelativeOverlap">
 
         <TextView
             android:id="@+id/tituloNota"
@@ -30,22 +32,22 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentEnd="true"
-        android:layout_toStartOf="@id/layoutContenido"
         android:layout_marginEnd="32dp"
+        android:layout_toStartOf="@id/layoutContenido"
+        android:contentDescription="@string/click_para_editar_nota"
         android:src="@drawable/edit"
-        android:contentDescription= "Click para editar nota"
-        />
+        tools:ignore="RedundantDescriptionCheck" />
 
     <ImageView
         android:id="@+id/iconoEliminar"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentEnd="true"
-        android:layout_toStartOf="@id/iconoEditar"
         android:layout_marginEnd="4dp"
+        android:layout_toStartOf="@id/iconoEditar"
+        android:contentDescription="@string/click_para_eliminar_nota"
         android:src="@drawable/trash"
-        android:contentDescription= "Click para eliminar nota"
-        />
+        tools:ignore="RedundantDescriptionCheck" />
 
 </RelativeLayout>
 

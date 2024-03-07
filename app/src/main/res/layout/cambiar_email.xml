@@ -11,7 +11,8 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        tools:ignore="MissingConstraints">
 
         <RelativeLayout
             android:id="@+id/toolbarLayout"
@@ -25,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
-                android:text="Take Note"
+                android:text="@string/take_note"
                 android:textSize="50sp" />
         </RelativeLayout>
 
@@ -40,39 +41,36 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="60dp"
-                app:tint="@android:color/white"
+                android:contentDescription="@string/click_para_ir_a_ajustes"
                 android:src="@drawable/config"
-                android:contentDescription= "Click para ir a ajustes"
-                />
+                app:tint="@android:color/white"
+                tools:ignore="RedundantDescriptionCheck" />
 
             <ImageView
                 android:id="@+id/iconoHome"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="30dp"
+                android:contentDescription="@string/click_para_ir_al_inicio"
                 android:src="@drawable/home"
                 app:tint="@android:color/white"
-                android:contentDescription= "Click para ir al inicio"
-                />
+                tools:ignore="RedundantDescriptionCheck" />
 
             <ImageView
                 android:id="@+id/iconoCerrarSesion"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="2dp"
+                android:contentDescription="@string/click_para_cerrar_sesion"
                 android:src="@drawable/logout_dark"
                 app:tint="@android:color/white"
-                android:contentDescription= "Click para cerrar sesion"
-                />
+                tools:ignore="RedundantDescriptionCheck" />
 
         </RelativeLayout>
 
@@ -95,7 +93,7 @@
             android:id="@+id/textViewEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cambiar Email"
+            android:text="@string/cambiar_email"
             android:textSize="24sp"
             android:layout_gravity="center"
             android:layout_marginBottom="24dp"/>
@@ -104,16 +102,19 @@
             android:id="@+id/editTextNewEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nuevo Email"
-            android:inputType="textEmailAddress"
             android:layout_marginBottom="16dp"
-            android:paddingLeft="8dp"/>
+            android:hint="@string/nuevo_email"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:paddingStart="8dp"
+            tools:ignore="RtlSymmetry"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/buttonChangeEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cambiar Email"/>
+            android:text="@string/cambiar_email"/>
 
     </LinearLayout>
 

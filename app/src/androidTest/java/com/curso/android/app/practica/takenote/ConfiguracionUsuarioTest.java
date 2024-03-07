@@ -34,10 +34,10 @@ public class ConfiguracionUsuarioTest {
         Log.d(TAG, "setUp: Iniciando sesión con el usuario de prueba");
     }
 
-    private void signInWithTestUser(String email, String password) throws InterruptedException {
+    private void signInWithTestUser() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
-        mAuth.signInWithEmailAndPassword(email, password)
+        mAuth.signInWithEmailAndPassword("test@example.com", "password123")
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "signInWithTestUser:success");
@@ -53,7 +53,7 @@ public class ConfiguracionUsuarioTest {
 
     @Test
     public void testChangePassword() throws InterruptedException {
-        signInWithTestUser("test@example.com", "password123");
+        signInWithTestUser();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assertNotNull(currentUser);
 
@@ -69,6 +69,7 @@ public class ConfiguracionUsuarioTest {
                         mAuth.signOut(); // Cerramos sesión para probar el inicio de sesión con la nueva contraseña
 
                         // Iniciamos sesión con las nuevas credenciales
+                        assert email != null;
                         mAuth.signInWithEmailAndPassword(email, newPassword)
                                 .addOnCompleteListener(signInTask -> {
                                     if (signInTask.isSuccessful()) {
@@ -76,19 +77,26 @@ public class ConfiguracionUsuarioTest {
                                         assertTrue(true);
                                     } else {
                                         // Fallo al iniciar sesión con la nueva contraseña
-                                        fail("Fallo al iniciar sesión con la nueva contraseña: " + signInTask.getException().getMessage());
+                                        if (signInTask.getException() != null) {
+                                            fail("Fallo al iniciar sesión con la nueva contraseña: " + signInTask.getException().getMessage());
+                                        } else {
+                                            fail("Fallo al iniciar sesión con la nueva contraseña: Excepción desconocida.");
+                                        }
                                     }
                                 });
                     } else {
-                        // Fallo al actualizar la contraseña
-                        fail("Fallo al cambiar la contraseña: " + task.getException().getMessage());
+                        if (task.getException() != null) {
+                            fail("Fallo al cambiar la contraseña: " + task.getException().getMessage());
+                        } else {
+                            fail("Fallo al cambiar la contraseña: Excepción desconocida.");
+                        }
                     }
                 });
     }
 
     @Test
     public void testUserProfileManagement() throws InterruptedException {
-        signInWithTestUser("test@example.com", "password123");
+        signInWithTestUser();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assertNotNull(currentUser);
 
@@ -99,7 +107,12 @@ public class ConfiguracionUsuarioTest {
                         assertNull(mAuth.getCurrentUser());
                     } else {
                         // Fallo al eliminar el usuario
-                        fail("Fallo al borrar el usuario: " + task.getException().getMessage());
+                        if (task.getException() != null) {
+                            fail("Fallo al borrar el usuario: " + task.getException().getMessage());
+                        } else {
+                            fail("Fallo al borrar el usuario: Excepción desconocida.");
+                        }
+
                     }
                 });
     }

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
-                android:text="Take Note"
+                android:text="@string/app_name"
                 android:textSize="50sp" />
         </RelativeLayout>
 
@@ -42,39 +42,36 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="60dp"
-                app:tint="@android:color/white"
+                android:contentDescription="@string/click_para_ir_a_ajustes"
                 android:src="@drawable/config"
-                android:contentDescription= "Click para ir a ajustes"
-                />
+                app:tint="@android:color/white"
+                tools:ignore="RedundantDescriptionCheck" />
 
             <ImageView
                 android:id="@+id/iconoHome"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="30dp"
+                android:contentDescription="@string/click_para_ir_al_inicio"
                 android:src="@drawable/home"
                 app:tint="@android:color/white"
-                android:contentDescription= "Click para ir al inicio"
-                />
+                tools:ignore="RedundantDescriptionCheck" />
 
             <ImageView
                 android:id="@+id/iconoCerrarSesion"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="2dp"
+                android:contentDescription="@string/click_para_cerrar_sesion"
                 android:src="@drawable/logout_dark"
                 app:tint="@android:color/white"
-                android:contentDescription= "Click para cerrar sesion"
-                />
+                tools:ignore="RedundantDescriptionCheck" />
 
         </RelativeLayout>
 
@@ -100,17 +97,17 @@
                 android:id="@+id/textoModoOscuro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Modo Oscuro"
+                android:text="@string/modo_oscuro"
                 android:textSize="24sp" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switchDarkMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:checked="false"
-                android:textOff="Off"
-                android:textOn="On"
+                android:textOff="@string/off"
+                android:textOn="@string/on"
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
@@ -118,11 +115,12 @@
             android:id="@+id/textGestionCuenta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gestionar Cuenta"
-            android:textSize="24sp"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:onClick="goToGestion"/>
+            android:minHeight="48dp"
+            android:onClick="goToGestion"
+            android:text="@string/gestionar_cuenta"
+            android:textSize="24sp" />
 
 
 <!--        <TextView-->

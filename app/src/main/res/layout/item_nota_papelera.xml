@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -31,26 +32,10 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentEnd="true"
-        android:layout_toStartOf="@id/layoutContenido"
         android:layout_marginEnd="5dp"
-        android:src="@drawable/back"
-        android:contentDescription= "Click para restaurar nota"
-        />
-
-    <ImageView
-        android:id="@+id/iconoEditar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentEnd="true"
         android:layout_toStartOf="@id/layoutContenido"
-        android:layout_marginEnd="32dp" />
+        android:contentDescription="@string/click_para_restaurar_nota"
+        android:src="@drawable/back" />
 
-    <ImageView
-        android:id="@+id/iconoEliminar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentEnd="true"
-        android:layout_toStartOf="@id/iconoEditar"
-        android:layout_marginEnd="64dp" />
 
 </RelativeLayout>
