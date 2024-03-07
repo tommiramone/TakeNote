@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+//import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,8 +19,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "TakeNote";
     private static final int DATABASE_VERSION = 1;
 
+
+
     private static DatabaseHelper instance;
     private String userId;
+
+    private SQLiteDatabase database;
+
+    public void setDatabase(SQLiteDatabase database) {
+        this.database = database;
+    }
 
     public static synchronized DatabaseHelper getInstance(Context context) {
         if (instance == null) {
@@ -34,7 +42,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableQuery = "CREATE TABLE notas (_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, titulo TEXT, cuerpo TEXT)";
@@ -46,13 +53,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createPapeleraTableQuery = "CREATE TABLE papelera (_id INTEGER PRIMARY KEY AUTOINCREMENT, idNota INTEGER, titulo TEXT, cuerpo TEXT, user_id TEXT)";
         db.execSQL(createPapeleraTableQuery);
 
-        Log.d("DatabaseHelper", "Tabla 'papelera' creada con éxito");
+//        Log.d("DatabaseHelper", "Tabla 'papelera' creada con éxito");
         Cursor cursor = db.rawQuery("PRAGMA table_info(papelera)", null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 String columnName = cursor.getString(cursor.getColumnIndex("name"));
                 String columnType = cursor.getString(cursor.getColumnIndex("type"));
-                Log.d("DatabaseHelper", "Columna: " + columnName + ", Tipo: " + columnType);
+//                Log.d("DatabaseHelper", "Columna: " + columnName + ", Tipo: " + columnType);
             }
             cursor.close();
         }
@@ -88,7 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put("cuerpo", cuerpo);
 
             db.insertOrThrow("notas", null, values);
-            Log.d("MyApp", "Nuevo registro insertado en la base de datos");
+//            Log.d("MyApp", "Nuevo registro insertado en la base de datos");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -106,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         private String user_id;
 
-        public Nota(int id,  String titulo, String cuerpo) {
+        public Nota(int id, String titulo, String cuerpo) {
             this.id = id;
             this.titulo = titulo;
             this.cuerpo = cuerpo;
@@ -146,11 +153,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             this.contrasenia = contrasenia;
         }
 
-        public String getId(){
+        public String getId() {
             return userId;
         }
 
-        public String setId(){
+        public String setId() {
             return obtenerUsuarioActual();
         }
 
@@ -158,11 +165,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return nombre;
         }
 
-        public String getEmail(){
+        public String getEmail() {
             return email;
         }
 
-        public String getContrasenia(){
+        public String getContrasenia() {
             return contrasenia;
         }
 
@@ -194,7 +201,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db = this.getReadableDatabase();
             String tableName = (tipo.equals("notas")) ? "notas" : "papelera";
             String selection = "user_id=?";
-            String[] selectionArgs = { userId };
+            String[] selectionArgs = {userId};
             cursor = db.query(tableName, null, selection, selectionArgs, null, null, null);
 
             if (cursor != null && cursor.moveToFirst()) {
@@ -222,8 +229,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     public void actualizarNota(int idNota, String nuevoTitulo, String nuevoCuerpo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -233,7 +238,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put("cuerpo", nuevoCuerpo);
 
             db.update("notas", values, "_id=?", new String[]{String.valueOf(idNota)});
-            Log.d("DatabaseHelper", "Nota actualizada correctamente en la base de datos");
+//            Log.d("DatabaseHelper", "Nota actualizada correctamente en la base de datos");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -255,11 +260,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String titulo = cursor.getString(cursor.getColumnIndex("titulo"));
                 String cuerpo = cursor.getString(cursor.getColumnIndex("cuerpo"));
 
-                Log.d("DatabaseHelper", "Nota encontrada - ID: " + id + ", Título: " + titulo + ", Cuerpo: " + cuerpo + "Usuario id:" + obtenerUsuarioActual());
+//                Log.d("DatabaseHelper", "Nota encontrada - ID: " + id + ", Título: " + titulo + ", Cuerpo: " + cuerpo + "Usuario id:" + obtenerUsuarioActual());
 
                 nota = new Nota(id, titulo, cuerpo);
             } else {
-                Log.d("DatabaseHelper", "No se encontró ninguna nota con ID: " + notaId + " para el usuario con ID: " + obtenerUsuarioActual());
+//                Log.d("DatabaseHelper", "No se encontró ninguna nota con ID: " + notaId + " para el usuario con ID: " + obtenerUsuarioActual());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -287,7 +292,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             db.delete("notas", "_id=? AND user_id=?", new String[]{String.valueOf(notaId), userId});
-            Log.d("DatabaseHelper", "Nota eliminada exitosamente: ID=" + notaId);
+//            Log.d("DatabaseHelper", "Nota eliminada exitosamente: ID=" + notaId);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -313,9 +318,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 long result = db.insertOrThrow("papelera", null, values);
                 if (result != -1) {
                     eliminarNota(userId, notaId);
-                    Log.d("DatabaseHelper", "Nota insertada en la papelera con éxito y eliminada de la tabla de notas");
+//                    Log.d("DatabaseHelper", "Nota insertada en la papelera con éxito y eliminada de la tabla de notas");
                 } else {
-                    Log.e("DatabaseHelper", "Error al insertar la nota en la papelera");
+//                    Log.e("DatabaseHelper", "Error al insertar la nota en la papelera");
                 }
             }
         } catch (SQLException e) {
@@ -340,10 +345,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String cuerpoAntes = cursor.getString(cursor.getColumnIndex("cuerpo"));
                 String userIdAntes = cursor.getString(cursor.getColumnIndex("user_id"));
 
-                Log.d("DatabaseHelper", "Información de la nota antes de restaurarla:");
-                Log.d("DatabaseHelper", "Título: " + tituloAntes);
-                Log.d("DatabaseHelper", "Cuerpo: " + cuerpoAntes);
-                Log.d("DatabaseHelper", "User ID: " + userIdAntes);
+//                Log.d("DatabaseHelper", "Información de la nota antes de restaurarla:");
+//                Log.d("DatabaseHelper", "Título: " + tituloAntes);
+//                Log.d("DatabaseHelper", "Cuerpo: " + cuerpoAntes);
+//                Log.d("DatabaseHelper", "User ID: " + userIdAntes);
 
                 cursor.close();
             }
@@ -364,7 +369,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // Inserta la nota en la tabla de notas sin especificar el ID
                 long result = db.insertOrThrow("notas", null, values);
                 if (result != -1) {
-                    Log.d("DatabaseHelper", "Nota restaurada en la tabla de notas con éxito. Nuevo ID=" + result);
+//                    Log.d("DatabaseHelper", "Nota restaurada en la tabla de notas con éxito. Nuevo ID=" + result);
 
                     // Obtener información de la nota después de restaurarla
                     Cursor cursorDespues = db.rawQuery("SELECT * FROM notas WHERE _id = ?",
@@ -375,15 +380,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         String cuerpoDespues = cursorDespues.getString(cursorDespues.getColumnIndex("cuerpo"));
                         String userIdDespues = cursorDespues.getString(cursorDespues.getColumnIndex("user_id"));
 
-                        Log.d("DatabaseHelper", "Información de la nota después de restaurarla:");
-                        Log.d("DatabaseHelper", "Título: " + tituloDespues);
-                        Log.d("DatabaseHelper", "Cuerpo: " + cuerpoDespues);
-                        Log.d("DatabaseHelper", "User ID: " + userIdDespues);
+//                        Log.d("DatabaseHelper", "Información de la nota después de restaurarla:");
+//                        Log.d("DatabaseHelper", "Título: " + tituloDespues);
+//                        Log.d("DatabaseHelper", "Cuerpo: " + cuerpoDespues);
+//                        Log.d("DatabaseHelper", "User ID: " + userIdDespues);
 
                         cursorDespues.close();
                     }
                 } else {
-                    Log.e("DatabaseHelper", "Error al restaurar la nota en la tabla de notas.");
+//                    Log.e("DatabaseHelper", "Error al restaurar la nota en la tabla de notas.");
                 }
             }
         } catch (SQLException e) {
@@ -395,6 +400,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+}
 
 
 //    public void eliminarYRecrearBaseDeDatos() {
@@ -417,7 +423,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    }
 
 
-}
+
 
 
 

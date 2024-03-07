@@ -27,7 +27,7 @@
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
                 android:text="Take Note"
-                android:textSize="60sp" />
+                android:textSize="50sp" />
         </RelativeLayout>
 
         <RelativeLayout

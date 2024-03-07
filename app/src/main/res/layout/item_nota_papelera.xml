@@ -33,7 +33,9 @@
         android:layout_alignParentEnd="true"
         android:layout_toStartOf="@id/layoutContenido"
         android:layout_marginEnd="5dp"
-        android:src="@drawable/back" />
+        android:src="@drawable/back"
+        android:contentDescription= "Click para restaurar nota"
+        />
 
     <ImageView
         android:id="@+id/iconoEditar"

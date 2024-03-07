@@ -83,12 +83,37 @@ public class Papelera extends AppCompatActivity implements NotaAdapter.OnItemCli
             }
         });
 
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
+        iconoConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Papelera.this, Config.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
+            }
+        });
+
         mNotaAdapter.setNotas(notasEnPapelera);
         mNotaAdapter.setOnItemClickListener(this);
     }
 
     String userId = obtenerUsuarioActual();
 
+    private void cerrarSesion() {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intent = new Intent(Papelera.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
     private String obtenerUsuarioActual() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {

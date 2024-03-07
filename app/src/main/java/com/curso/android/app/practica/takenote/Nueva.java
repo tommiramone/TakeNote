@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.curso.android.app.practica.takenote.database.DatabaseHelper;
@@ -46,6 +47,42 @@ public class Nueva extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        ImageView iconoHome = findViewById(R.id.iconoHome);
+        iconoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
+        iconoConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Nueva.this, Config.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
+            }
+        });
+
+    }
+
+    private void cerrarSesion() {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intent = new Intent(Nueva.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void guardarNota() {

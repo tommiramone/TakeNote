@@ -32,7 +32,9 @@
         android:layout_alignParentEnd="true"
         android:layout_toStartOf="@id/layoutContenido"
         android:layout_marginEnd="32dp"
-        android:src="@drawable/edit" />
+        android:src="@drawable/edit"
+        android:contentDescription= "Click para editar nota"
+        />
 
     <ImageView
         android:id="@+id/iconoEliminar"
@@ -41,7 +43,9 @@
         android:layout_alignParentEnd="true"
         android:layout_toStartOf="@id/iconoEditar"
         android:layout_marginEnd="4dp"
-        android:src="@drawable/trash" />
+        android:src="@drawable/trash"
+        android:contentDescription= "Click para eliminar nota"
+        />
 
 </RelativeLayout>
 

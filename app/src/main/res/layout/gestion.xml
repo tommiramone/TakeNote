@@ -1,7 +1,7 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:id="@+id/mainCoordinatorLayout">
 
@@ -22,8 +22,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:textColor="@color/white"
                 android:text="Take Note"
-                android:textSize="60sp" />
+                android:textSize="50sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/blue_dark"
+            >
+
+            <ImageView
+                android:id="@+id/iconoConfig"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="60dp"
+                app:tint="@android:color/white"
+                android:src="@drawable/config"
+                />
+
+            <ImageView
+                android:id="@+id/iconoHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="30dp"
+                android:src="@drawable/home"
+                app:tint="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/iconoCerrarSesion"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/logout_dark"
+                app:tint="@android:color/white" />
+
         </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

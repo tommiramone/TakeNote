@@ -25,7 +25,7 @@
                 android:layout_centerInParent="true"
                 android:text="Take Note"
                 android:textColor="@android:color/white"
-                android:textSize="60sp" />
+                android:textSize="50sp"/>
         </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

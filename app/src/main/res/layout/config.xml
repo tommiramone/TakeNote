@@ -13,27 +13,71 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="MissingConstraints">
+        android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
+            android:id="@+id/toolbarLayout"
             android:layout_width="match_parent"
-            android:layout_height="122dp"
+            android:layout_height="140dp"
             android:background="@color/blue">
 
             <TextView
                 android:id="@+id/toolbarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
                 android:text="Take Note"
-                android:textSize="60sp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center" />
-        </com.google.android.material.appbar.MaterialToolbar>
+                android:textSize="50sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/blue_dark"
+            >
+
+            <ImageView
+                android:id="@+id/iconoConfig"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="60dp"
+                app:tint="@android:color/white"
+                android:src="@drawable/config"
+                android:contentDescription= "Click para ir a ajustes"
+                />
+
+            <ImageView
+                android:id="@+id/iconoHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="30dp"
+                android:src="@drawable/home"
+                app:tint="@android:color/white"
+                android:contentDescription= "Click para ir al inicio"
+                />
+
+            <ImageView
+                android:id="@+id/iconoCerrarSesion"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/logout_dark"
+                app:tint="@android:color/white"
+                android:contentDescription= "Click para cerrar sesion"
+                />
+
+        </RelativeLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout

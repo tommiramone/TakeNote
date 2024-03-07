@@ -2,7 +2,6 @@ package com.curso.android.app.practica.takenote;
 
 
 import static android.content.ContentValues.TAG;
-
 import static com.curso.android.app.practica.takenote.utils.temaUtils.loadThemeState;
 
 import android.content.DialogInterface;
@@ -11,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -75,7 +75,45 @@ public class Gestion extends AppCompatActivity {
             }
         });
 
+        ImageView iconoHome = findViewById(R.id.iconoHome);
+        iconoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
+            }
+        });
 
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
+        iconoConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Gestion.this, Config.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView logOut = findViewById(R.id.iconoCerrarSesion);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
+            }
+        });
+
+
+
+
+
+    }
+
+    private void cerrarSesion() {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intent = new Intent(Gestion.this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     public void cambiarEmail(View view) {
