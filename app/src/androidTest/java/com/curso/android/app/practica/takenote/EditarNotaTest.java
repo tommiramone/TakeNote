@@ -27,7 +27,7 @@
 
 
                 // Paso 0: Iniciar sesión con Firebase Authentication
-                FirebaseAuth.getInstance().signInWithEmailAndPassword("tommiramonee@gmail.com", "ramone1996");
+                FirebaseAuth.getInstance().signInWithEmailAndPassword("test@example.com", "password123");
 
                 // Esperar a que se complete el inicio de sesión (puedes utilizar IdlingResource o esperas explícitas)
 
