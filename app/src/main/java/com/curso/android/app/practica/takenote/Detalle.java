@@ -31,10 +31,22 @@ public class Detalle extends AppCompatActivity {
         tituloTextView.setText(titulo);
         cuerpoTextView.setText(cuerpo);
 
-        // Configurar el botón de cerrar sesión
+        //Importación y funcionalidad de imageView de toolbar.
+        ImageView iconoHome = findViewById(R.id.iconoHome);
+        ImageView iconoConfig = findViewById(R.id.iconoConfig);
         ImageView logOut = findViewById(R.id.iconoCerrarSesion);
-        logOut.setOnClickListener(v -> cerrarSesion());
-    }
+
+        iconoHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+        });
+
+        iconoConfig.setOnClickListener(v -> {
+            Intent intent = new Intent(Detalle.this, Config.class);
+            startActivity(intent);
+        });
+
+        logOut.setOnClickListener(v -> cerrarSesion());    }
 
     //Funcionalidad de cerrar sesion
     private void cerrarSesion() {
