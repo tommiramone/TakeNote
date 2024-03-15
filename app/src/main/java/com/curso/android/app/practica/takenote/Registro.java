@@ -27,7 +27,7 @@ public class Registro extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         EditText emailEditText = findViewById(R.id.editTextEmail);
-        EditText contraseniaEditText = findViewById(R.id.editTextPassword);
+        EditText contraseniaEditText = findViewById(R.id.editTextPasswordRegister);
         Button buttonRegistro = findViewById(R.id.buttonRegister);
 
         //Oir y actuar con el click en el boton de registro.
