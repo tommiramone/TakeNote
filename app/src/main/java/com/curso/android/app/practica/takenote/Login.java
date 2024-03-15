@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.curso.android.app.practica.takenote.utils.temaUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
@@ -29,6 +32,7 @@ public class Login extends AppCompatActivity {
         EditText emailEditText = findViewById(R.id.editTextUsername);
         EditText passwordEditText = findViewById(R.id.editTextPassword);
         Button buttonLogin = findViewById(R.id.buttonLogin);
+        TextView forgotPasswordTextView = findViewById(R.id.textViewPasswordForgot);
 
         //Oir el click sobre el boton de Login y actuar en consecuencia.
         buttonLogin.setOnClickListener(v -> {
@@ -60,6 +64,29 @@ public class Login extends AppCompatActivity {
             startActivity(new Intent(Login.this, Home.class));
             finish();
         }
+
+        // Manejar el clic en el enlace "Restablece tu contraseña"
+        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailEditText.getText().toString().trim();
+                if (!email.isEmpty()) {
+                    mAuth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(Login.this, "Se ha enviado un correo electrónico para restablecer tu contraseña.", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(Login.this, "No se pudo enviar el correo electrónico para restablecer la contraseña. Verifica tu dirección de correo electrónico.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                } else {
+                    Toast.makeText(Login.this, "Por favor, introduce tu correo electrónico para restablecer la contraseña.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 
@@ -68,4 +95,7 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(this, Registro.class);
         startActivity(intent);
     }
+
+
 }
+

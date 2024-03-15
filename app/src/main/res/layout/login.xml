@@ -93,7 +93,7 @@
             android:layout_below="@id/textViewRegister"
             android:layout_centerHorizontal="true"
             android:minHeight="48sp"
-            android:onClick="goToRegisterActivity"
+            android:onClick="goToResetPassword"
             android:text="Restablece tu contraseña"
             android:textColor="@color/black"
             android:textSize="16sp" />
